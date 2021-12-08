@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>상자배치</title>
+	<style>
+		.box1{
+			height: 500px;  box-sizing: border-box;
+			border: 2px solid red; padding: 10px;
+		}
+		.box1_1{
+			height: 100%; box-sizing: border-box;
+			border: 5px solid blue; 
+			}
+		.box2{
+			height: 500px;  box-sizing: border-box;
+			border: 2px solid red; 
+		}
+		.box2_1{
+			height: calc(100% - 20px); box-sizing: border-box;
+			border: 5px solid blue;  margin: 10px;
+			}
+	</style>
+</head>
+<body>
+	<!-- 패딩이용 -->
+	<div class="box1">
+		<div class="box1_1">
+		</div>
+	</div>
+	<!-- 마진이용 >> 조금 불편 -->
+	<div class="box2">
+		<div class="box2_1">
+		</div>
+	</div>
+</body>
+</html>
