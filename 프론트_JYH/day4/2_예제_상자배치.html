@@ -7,30 +7,28 @@
 	<title>상자배치예제</title>
 	<style>
 		.box1{
-			height: 300px;	box-sizing: border-box;
+			box-sizing: border-box;
 			border: 2px solid red; padding: 10px;
 		}
-		.box1-1{
+		.box1-1, .box1-2{
 			border: 5px solid blue; height: 100%; box-sizing: border-box;
+			height: 300px;
 		}
-		.box2{
-			height: 300px;	box-sizing: border-box;
-			border: 2px solid red;
-		}
-		.box2-1{
-			border: 5px solid blue;	margin : 10px;
-			height: calc(100% - 20px) ; box-sizing: border-box;
+		.box1-2, .box1-1:nth-child(2){
+			border-color: #0f0; margin-top: 10px;
 		}
 	</style>
 </head>
 <body>
-	<!-- padding을 이용하여 배치 -->
+	<!-- 클래스 이름을 다르게 해서 배치 -->
 	<div class="box1">
 		<div class="box1-1"></div>
+		<div class="box1-2"></div>
 	</div>
-	<!-- margin을 이용하여 배치 -->
-	<div class="box2">
-		<div class="box2-1"></div>
+	<!-- 클래스 이름을 같게 해서 배치 -->
+	<div class="box1">
+		<div class="box1-1"></div>
+		<div class="box1-1"></div>
 	</div>
 </body>
 </html>
