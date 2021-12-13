@@ -120,7 +120,7 @@
 	background-size: 444px 439px; background-position: -83px -296px;
 	content: '';
 }
-.menu-container .btn-more i{
+.menu-container .btn-more:hover{
 	text-decoration: underline;
 }
 
@@ -168,6 +168,9 @@
 	float: left; font-size:  13px; width: 310px; overflow: hidden;
 	white-space: nowrap; text-overflow: ellipsis;
 }
+.contents-l-box2  .link-issue:hover{
+	text-decoration: underline;
+}
 .contents-l-box2 .link-enter,
 .contents-l-box2 .link-sports,
 .contents-l-box2 .link-economy{
@@ -181,6 +184,8 @@
 	border-radius: 50%; margin-left: 8px; vertical-align: 3px;
 	background-color: #c8ccd1; 
 }
+
+
 /* 뉴스스탠드 */
 .contents-l-box2 .group-title{
 	padding: 22px 0 16px; font-size: 14px; line-height: 18px;
@@ -384,8 +389,8 @@
 .contents-r-box2 > .btn-box i{
 	font-size: 20px; color: gray; line-height: 23px;
 }
-.contents-r-box2 > .btn-box > .prev-btn i,
-.contents-r-box2 > .btn-box > .next-btn i{
+.contents-r-box2 > .btn-box > .prev-btn:hover i,
+.contents-r-box2 > .btn-box > .next-btn:hover i{
 	color: red;
 }
 /* 푸터 박스 */
