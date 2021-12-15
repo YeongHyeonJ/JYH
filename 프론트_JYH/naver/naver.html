@@ -7,6 +7,7 @@
 	<title>NAVER</title>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 	<link rel="stylesheet" href="naver.css">
+	<script src="../js/jquery.min.js"></script>
 </head>
 <body>
 	<div class="whale-box container-fluid"></div>
@@ -24,7 +25,9 @@
 		</div>
 	</div>
 	<div class="menu-box container-fluid">
+		<div class="service-box"></div>
 		<div class="menu-container-box container">
+			
 			<!-- 메일~ 더보기전까지 메뉴 -->
 			<div class="menu-container">
 				<ul class="green-menu-box menu">
@@ -79,11 +82,12 @@
 						<a href="#" class="menu-link">웹툰</a>
 					</li>
 				</ul>
-				<a href="#" class="btn-more">더보기</a>
+				<a href="#" id="btn-more" class="btn-more">더보기</a>
 			</div>
 		</div>
 	</div>
 	<div class="contents-box container">
+	
 		<div class="contents-l-box">
 			<!-- 광고박스 -->
 			<div class="contents-l-box1">
@@ -325,7 +329,61 @@
 				</div>
 			</div>
 			<!-- 뉴스칸 종료 -->
-			
+			<div class="contents-l-box3">
+				<div class="theme-head">
+					<div class="group-title after">
+						<div class="group-title-l after">
+							<span class="title">오늘 읽을만한 글</span>
+							<span class="dsc">주제별로 분류된 다양한 글 모음</span>
+						</div>
+						<div class="group-title-r">
+							<span class="info">
+								1,762
+								<span class="new">개의 글</span>
+							</span>
+							<a href="#" class="btn-set">관심주제 설정</a>
+						</div>
+
+
+					</div>
+					<div class="group-category">
+						<div class="main-category after">
+							<ul class="category-list">
+								<li class="category-item">
+									<a href="#" class="category-link enter">엔터</a>
+								</li>
+								<li class="category-item">
+									<a href="#" class="category-link sports sel">스포츠</a>
+								</li>
+								<li class="category-item">
+									<a href="#" class="category-link car">웹툰</a>
+								</li>
+								<li class="category-item">
+									<a href="#" class="category-link webtoon">자동차</a>
+								</li>
+								<li class="category-item">
+									<a href="#" class="category-link economy">게임</a>
+								</li>
+								<li class="category-item">
+									<a href="#" class="category-link recipe">테크</a>
+								</li>
+								<li class="category-item">
+									<a href="#" class="category-link game">게임</a>
+								<li class="category-item">
+									<a href="#" class="category-link movie">영화</a>
+								</li>
+							</ul>
+							
+						</div>
+					</div>asd <br><br><br><br><br>
+				</div>
+				<div class="theme-contents"></div>
+
+
+
+
+
+			</div>
 		</div>
 		<div class="contents-r-box">
 			<div class="contents-r-box1">
@@ -336,6 +394,23 @@
 				</a>
 			</div>
 			<div class="contents-r-box2">
+				<div class="contents-view">
+					<ul class="contents-list after">
+						<li class="contents-item">
+							<a href="#" class="contents-link">
+								<i class="news-badge">이슈</i>
+								<span class="news">코로나바이러스감염증-19 현황</span>
+							</a>
+						</li>
+						<li class="contents-item">
+							<a href="#" class="contents-link">2</a>
+						</li>
+					</ul>
+				</div>
+
+
+
+
 				<div class="btn-box">
 					<a href="#" class="prev-btn"><i class="fas fa-angle-left"></i></a>
 					<a href="#" class="next-btn"><i class="fas fa-angle-right"></i></a>
@@ -344,5 +419,10 @@
 		</div>
 	</div>
 	<footer class="footer-box container"></footer>
+	<script>
+		$('#btn-more').click(function(){
+			$('.service-box').toggle()
+		});
+	</script>
 </body>
 </html>
