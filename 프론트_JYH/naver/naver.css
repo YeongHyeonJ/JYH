@@ -126,8 +126,15 @@
 	background-size: 444px 439px; background-position: -83px -296px;
 	content: '';
 }
+
 .menu-container .btn-more:hover{
 	text-decoration: underline;
+}
+.menu-container .btn-more.fold{
+	color: #0ecd5a;
+}
+.menu-container .btn-more.fold::after{
+	background-position: -70px -296px;
 }
 
 /* 컨텐츠 박스 */
@@ -445,7 +452,16 @@
 .contents-l-box3 .group-container{
 	position: relative;
 }
-
+.contents-l-box3 .btn-box .btn-prev,
+.contents-l-box3 .btn-box .btn-next{
+	position: absolute; width: 40px; height: 40px; z-index: 3;
+	background-image: url(https://s.pstatic.net/static/www/img/uit/2021/sp_main_5f355c.png);
+	background-size: 444px 439px; background-position: -128px -352px;
+	top: 6px; left: -23px;
+}
+.contents-l-box3 .btn-box .btn-next{
+	left: auto; right: -23px; background-position: -86px -352px;
+}
 
 
 

@@ -328,4 +328,289 @@
       * top, bottom, right, left를 이용하여 위치 조절
       * width 대신에 left와 right를 설정하면 됨
       * height 대신에 top과 bottom을 설정하면 됨
+    
+  * float
+  
+    * 요소를 배치할 때 사용
+  
+    * 값은 left, right
+  
+    * 추가 작업을 하지 않으면 부모가 높이를 계산하지 못함
+  
+      * float 속성을 적용한 부모 요소에 다음 코드를 추가해야한다
+  
+      * ```css
+        부모선택자::after{
+            content : '';
+            clear : both;
+            display : block;
+        }
+        ```
+  
+        
+  
+    * absolute와 fixed 없이 컨텐츠를 왼쪽, 오른쪽 정렬을 할 수 있다. 
+  
+    * float 속성을 지정하면 display가 inline-block처럼 처리가 됨
 
+### calc()
+
+* 단위가 다른 값들을 계산하는 함수
+* 연산자 앞 뒤로 공백을 넣어야함
+
+
+
+### ::after와 ::before
+
+* ::before 
+  * 요소를 생성한 후에 요소 앞에 추가하는 내용
+* ::after 
+  * 요소를 생선한 후에 요소 뒤에 추가하는 내용
+
+### z-index
+
+* 요소들이 겹칠 때 누구를 위로 올리고, 내릴지를 결정해주는 속성
+* 기본적으로 코드 위치상 아래 있는 요소들이 위로 올라감
+* 기본값은 1
+* 숫자가 높을수록 위로 올라간다
+* position이 static 요소 A와 postion이 absolute인 요소 B가 겹치면 A의 z-index의 값과 상관없이 B가 위로 배치
+  * 이를 해결하기 위해 A의 position을 relative로 수정
+* 사촌관계요소(부모가 다른 요소)에서 겹칠때에는 본인 요소의 z-index보다 조상들 중 형제 관계에 있는 요소들의 z-index가 중요
+  * 두 조상 요소들이 position이 relative이어야 함
+
+### visibility
+
+* 텍스트를 안보이게 감추는 속성
+* 테스트 공간은 남겨놓고 안보이게 감춤
+* display:none; 
+  * 안보이는 기능은 같은데 해당 요소의 공간도 같이 감춤
+
+### overflow
+
+* 자식 요소가 부모 요소보다 커서 내용이 넘치는 경우 어떻게 할건지를 결정하는 속성
+* 값
+  * hidden
+    * 부모를 넘어서는 내용을 안보이게 감춤
+  * visible
+    * 부모를 넘어서는 내용을 보이게 함, 기본값
+  * scroll
+    * 부모를 넘어서는 내용을 안보이게 한 후 스크롤을 통해 다른 부분을 확인할 수 있게 함
+    * 이 때 부모를 넘지 않아도 스크롤이 무조건 생김
+  * auto
+    * 부모를 넘어서면 scoll, 안 넘어서면 scroll이 없어짐
+* ...을 할 때 같이 사용되는 속성
+
+
+
+### 리스트 관련 속성
+
+* list-style-type 
+  * disc | armenian | circle | cjk-ideographic | decimal | georgian | lower-alpha | lower-roman | square | upper-alpha | upper-roman | none
+  * 마커를 설정
+  * 마커는 리스트 앞에 있는 숫자나 모양
+* list-style-image
+  * 마커를 대체할 이미지를 설정
+* list-style-position
+  * inside | outside
+  * 마커의 위치, 리스트 안/밖, 기본값은 밖(outside)
+* list-style 
+  * list-style-type , list-style-image, list-style-position를 한번에 쓰는 단축 속성
+
+### 테이블 관련 속성
+
+* border 
+  * 테두리 속성
+* border-collapse 
+  * 중복된 테두리를 합치는 속성
+  * collapse : 합침
+
+
+
+### outline
+
+* input태그에 focus 되면 생기는 테두리를 제어하는 속성
+
+* input:focus를 이용하여 outline:none을 하면 focus 되었을 때 테두리를 없앨 수 있다
+
+  * ```css
+    input:focus{
+    	outline: none;
+    }
+    ```
+
+    
+
+### line-height
+
+* 글자의 높이를 조절할 때 사용
+* 같은 글자 크기라도 line-height 다르면 글자 높낮이가 달라진다
+* 글자 크기는 font-size
+
+### white-space
+
+* 공백을 어떻게 처리할건지를 정하는 속성
+* 값
+  * normal 
+    * 기본값, 엔터나 공백을 공백 하나로 처리. 내용이 길면 자동으로 줄을 바꿈
+  * nowrap
+    * 엔터나 공백을 하나로 처리. 줄바꿈은 `<br>` 로만 바뀜
+  * pre
+    * 연속 공백이나 엔터를 유지
+  * pre-wrap
+    * 연속 공백이나 엔터를 유지, 내용이 길면 자동으로 줄을 바꿈
+  * pre-line
+    * 공백을 하나로 합침. 엔터를 유지. 내용이 길면 자동으로 줄을 바꿈
+  * break-space
+    * 다음 차이점을 제외하면 pre-wrap과 동일
+    * 연속 공백이 끝에 위치해도 공간을 차지
+    * 연속 공백의 중간과 끝에서도 자동으로 줄을 바꿈
+
+### word-break
+
+* 라인이 바뀔 때 긴 단어를 어떻게 처리할지를 설정하는 속성
+* 값
+  * normal
+    * 기본값, 기본 줄 바꿈 규칙을 사용
+  * break-all
+    * 오버플로우를 방지하기 위해 두 문자 사이에서 줄바꿈이 발생할 수 있다(한중일 텍스트 제외)
+  * keep-all
+    * 한중일 텍스트에서 줄을 바꿀때 단어를 끊지 않는다
+
+### text-overflow
+
+* 글자가 박스를 넘어갈 때 넘어간 글자를 어떻게 할지를 설정하는 속성
+
+* 값
+
+  * clip
+
+    * 넘어가는 부분을 자름. 문자 중간에서 잘릴수 있다
+
+  * ellipsis
+
+    * 넘어가는 문자열을 줄임표(...)로 표시
+
+    * 1줄 말줄임
+
+    * ```css
+      .box1{
+      			width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      			border: 1px solid black;
+      		}
+      ```
+
+    * 2줄 말줄임
+
+    * ```css
+      .box2{
+          width: 100px; overflow: hidden; display: -webkit-box;
+          -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+          text-overflow: ellipsis; border: 1px solid black;
+      }
+      ```
+
+      
+
+### direction
+
+* 요소의 배치 방향을 정해주는 속성
+
+
+
+### display:flex
+
+* 부모 요소안에 자식 요소들의 가로의 길이합이 부모 요소보다 작으면 그대로 배치
+* 부모 요소안에 자식 요소들의 가록의 길이합이 부모 요소보다 크면 부모 요소 안에서 비율에 맞게 배치
+
+
+
+### cursor
+
+* 마우스 커서 모양을 설정하는 속성
+
+
+
+### animation
+
+* 적용 방법
+
+  1. @keyframes로 애니메이션을 등록
+
+     * ```css
+       /* 시간비율은 0%~100%까지, from(0%), to(100%)*/
+       @keyframes 애니메이션명{
+           시간비율 : {
+               속성명 : 값;
+           }
+           시간비율 : {
+               속성명 : 값;
+           }
+       }
+       ```
+
+  2. 원하는 요소의 css에 애니메이션을 적용
+
+     * ```css
+       선택자{
+           animation-name : 애니메이션명;
+           animation-duration : 정수s; /*애니메이션 실행 시간*/
+           animation-iteration-count : 숫자 | infinite; /*반복횟수*/
+       }
+       ```
+
+
+
+### transition
+
+* 요소에 특정 속성이 변화하면 서서히 진행시키게하는 속성
+
+* ```css
+  선택자{
+      transition : 속성명 시간s;
+  }
+  ```
+
+  
+
+### transform
+
+* 요소를 회전, 확대 등 다양하게 변화시켜주는 속성
+
+* ```css
+  선택자{
+      transform : 변환함수();
+  }
+  ```
+
+* 변환함수
+
+  * translate(x,y), translateX(x), translateY(y)
+    * x축으로 x만큼, y축으로 y만큼 이동
+  * scale(w, h) , scaleX(n), scaleY(n)
+    * 요소의 폭과 높이를 확대
+  * rotate(angle)
+    * 회전
+  * skew(x-angle, y-angle), skewX(angle), skewY(angle)
+    * 기울임
+
+### 크기 관련 속성
+
+* width, height
+  * 가로와 세로를 설정
+* min-width, min-height
+  * 최소 가로와 최소 세로를 설정
+* max-width, max-height
+  * 최대 가로와 최대 세로를 설정
+
+### 글자 간격 관련 속성
+
+* letter-spacing
+  * 글자 사이의 간격
+* word-spacing
+  * 단어 사이의 간격
+
+
+
+### vertical-align
+
+* 두 요소에서 높이가 다른 요소들을 배치할 때 높이를 어떻게 맞출지 설정하는 속성
