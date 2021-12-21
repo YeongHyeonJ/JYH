@@ -352,48 +352,48 @@
 						<div class="group-category">
 							<div class="main-category after">
 								<ul class="category-list">
-									<li class="category-item">
-										<a href="#" class="category-link enter sel">엔터</a>
+									<li class="category-item" data-target="#enter">
+										<a href="#" class="category-link enter">엔터</a>
 									</li>
-									<li class="category-item">
+									<li class="category-item" data-target="#sports">
 										<a href="#" class="category-link sports">스포츠</a>
 									</li>
-									<li class="category-item">
-										<a href="#" class="category-link car">웹툰</a>
+									<li class="category-item" data-target="#car">
+										<a href="#" class="category-link car">자동차</a>
 									</li>
-									<li class="category-item">
-										<a href="#" class="category-link webtoon">자동차</a>
+									<li class="category-item" data-target="#webtoon">
+										<a href="#" class="category-link webtoon">웹툰</a>
 									</li>
-									<li class="category-item">
-										<a href="#" class="category-link economy">게임</a>
+									<li class="category-item" data-target="#economy">
+										<a href="#" class="category-link economy">경제</a>
 									</li>
-									<li class="category-item">
-										<a href="#" class="category-link recipe">테크</a>
+									<li class="category-item" data-target="#recipe">
+										<a href="#" class="category-link recipe">레시피</a>
 									</li>
-									<li class="category-item">
+									<li class="category-item" data-target="#game">
 										<a href="#" class="category-link game">게임</a>
-									<li class="category-item">
+									<li class="category-item" data-target="#movie">
 										<a href="#" class="category-link movie">영화</a>
 									</li>
 								</ul>
 								<ul class="category-list">
 									<li class="category-item">
-										<a href="#" class="category-link enter sel">JOB</a>
+										<a href="#" class="category-link enter">JOB</a>
 									</li>
 									<li class="category-item">
 										<a href="#" class="category-link sports">스포츠</a>
 									</li>
 									<li class="category-item">
-										<a href="#" class="category-link car">웹툰</a>
+										<a href="#" class="category-link car">자동차</a>
 									</li>
 									<li class="category-item">
-										<a href="#" class="category-link webtoon">자동차</a>
+										<a href="#" class="category-link webtoon">웹툰</a>
 									</li>
 									<li class="category-item">
-										<a href="#" class="category-link economy">게임</a>
+										<a href="#" class="category-link economy">경제</a>
 									</li>
 									<li class="category-item">
-										<a href="#" class="category-link recipe">테크</a>
+										<a href="#" class="category-link recipe">레시피</a>
 									</li>
 									<li class="category-item">
 										<a href="#" class="category-link game">게임</a>
@@ -405,7 +405,16 @@
 						</div>
 					</div>
 				</div>
-				<div class="theme-contents"> 내용 </div>
+				<div class="theme-contents"> 
+					<div class="box" id="enter">엔터</div>	
+					<div class="box" id="sports">스포트</div>	
+					<div class="box" id="car">자동차</div>	
+					<div class="box" id="webtoon">웹툰</div>	
+					<div class="box" id="economy">경제</div>	
+					<div class="box" id="recipe">레시피</div>	
+					<div class="box" id="game">게임</div>	
+					<div class="box" id="movie">영화</div>	
+				</div>
 
 
 
@@ -469,18 +478,53 @@
 			$(this).addClass('sel');
 		});
 
-		var min3 = 0, max3 = 1;
-		var num3 = min3;
 
-		$('.contents-l-box3 .btn-box .btn').click(function(){
-			console.log(1)
-			if($(this).hasClass('btn-prev')){
-				num3 = --num3 < min3 ? min3 : num3;
-			}else{
-				num3 = ++num3 > max3 ? max3 : num3;
+		$('.contents-l-box .category-item').click(function(e){
+			e.preventDefault();
+			$('.contents-l-box .category-item').children().removeClass('sel');
+			$(this).children().addClass('sel');
+			var target = $(this).data('target');
+			$('.theme-contents>div').hide();
+			$(target).show();
+
+			$('.btn-prev').show();
+			$('.btn-next').show();
+			if( $('.contents-l-box .category-item .sel').parent().prev().length == 0 && 
+			$('.contents-l-box .category-item .sel').parents('.category-list').prev().length == 0){
+				$('.btn-prev').hide();
 			}
-			$('.contents-l-box3 .main-category').animate({marginLeft:-750 * num3});
+			if( $('.contents-l-box .category-item .sel').parent().next().length == 0 && 
+			$('.contents-l-box .category-item .sel').parents('.category-list').next().length == 0){
+				$('.btn-next').hide();
+			}	
 		});
+		
+		$('.btn-prev').click(function(e){
+			e.preventDefault();
+			if( $('.contents-l-box .category-item .sel').parent().prev().length == 1){
+				$('.contents-l-box .category-item .sel').parent().prev().click();
+			}
+			else {
+				if($('.contents-l-box .category-item .sel').parents('.category-list').prev().length == 1){
+					$('.contents-l-box .category-item .sel').parents('.category-list').prev().children().last().children().click();
+					$('.main-category').animate({'margin-left':'0px'})
+				}
+			}
+		});
+		$('.btn-next').click(function(e){
+			e.preventDefault();
+			if( $('.contents-l-box .category-item .sel').parent().next().length == 1){
+				$('.contents-l-box .category-item .sel').parent().next().click();
+			}
+			else {
+				if($('.contents-l-box .category-item .sel').parents('.category-list').next().length == 1){
+					$('.contents-l-box .category-item .sel').parents('.category-list').next().children().first().children().click();
+					var width = $('.contents-l-box .category-item .sel').parents('.category-list').width();
+					$('.main-category').animate({'margin-left':'-'+ width + 'px'})
+				}
+			}
+		});
+		$('.contents-l-box .category-list:first-of-type .category-item:first-child').children().click();
 	</script>
 </body>
 </html>

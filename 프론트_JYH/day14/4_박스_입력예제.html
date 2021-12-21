@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>체크박스</title>
+	<script src="../js/jquery.min.js"></script>
+	<style>
+		*{ 
+			padding: 0; margin: 0; list-style: none; text-decoration: none; color: #000;
+		}
+		.container{
+			box-sizing: border-box; border: 2px solid red; margin: 0 auto;
+			width: 80%; height: 500px; padding: 20px; position: relative;
+		}
+		.box-container{
+			box-sizing: border-box; border: 2px solid red;
+			padding: 10px; 
+		}
+		.box-container::after{
+			display: block; content: ''; clear: both;
+			width: 100%; 
+		}
+		.text-box{
+			box-sizing: border-box; border: 2px solid red; float: left;
+			width:18%; height: 50px; text-align: center; line-height: 50px; margin-left: 10px;
+		}
+		.text-show:first-child{
+			margin-left: 0;
+		}
+		.check-box{
+			box-sizing: border-box; 
+			background: gray; margin: 10px 0 ;
+			width: 70px;
+		}
+		.check-box:hover{
+			text-decoration: underline; cursor: pointer;
+		}
+		.text-box .checked{
+			box-sizing: border-box; border: none;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box-container">
+			<div class="text-box">1</div>
+			<div class="text-box">2</div>
+			<div class="text-box">3</div>
+		</div>
+		<div class="fruit-container">
+			<ul class="fruit-box">
+				<li class="check-box">
+					<input type="checkbox" name="fruit" value="apple">딸기
+				</li>
+				<li class="check-box">
+					<input type="checkbox" name="fruit" value="banana">바나나
+				</li>
+				<li class="check-box">
+					<input type="checkbox" name="fruit" value="fear">배
+				</li>
+				<li class="check-box">
+					<input type="checkbox" name="fruit" value="kiwi">키위
+				</li>
+				<li class="check-box">
+					<input type="checkbox" name="fruit" value="strawberry">딸기
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<script>
+		var arr = [];
+		$('input[type=checkbox]').click(function(){
+			$('.text-box').removeClass('checked').text('');
+			
+			var value = $(this).val();
+			console.log(value);
+			if($(this).prop('checked')){
+				arr.push(value);
+			}else{
+				var index = arr.indexOf(value);
+				arr.splice(index, 1);
+			}
+			
+
+			for(var i = 0; i <arr.length ; i++){
+				$('.text-box').eq(i).addClass('checked').text(arr[i]);
+			}
+
+		});
+	</script>
+</body>
+</html>
