@@ -525,6 +525,25 @@
 			}
 		});
 		$('.contents-l-box .category-list:first-of-type .category-item:first-child').children().click();
+
+		//이슈 롤링기능
+		var issueAreaId;
+		issueAreaId = issueRolling();
+		$('.issue-area').hover(function(){
+			clearInterval(issueAreaId);
+		},function(){
+			issueAreaId = issueRolling();
+		})
+		
+		function issueRolling(){
+			return setInterval(function(){
+			if(!$('.issue-area > li').first().is(':animated')){
+				$('.issue-area > li').first().animate({marginTop : -24}, 1000, function(){
+				$(this).removeAttr('style').detach().appendTo('.issue-area');
+				});
+			}
+		},2000);
+	}
 	</script>
 </body>
 </html>
