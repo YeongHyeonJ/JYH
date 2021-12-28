@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<script src="../js/jquery.min.js"></script>
+</head>
+<body>
+	<select name="fruit" id="">
+		<option value="">과일</option>
+		<option value="사과">사과</option>
+		<option value="배">배</option>
+		<option value="포도">포도</option>
+	</select>
+	<script>
+		$('select').change(function(){
+			console.log('change');
+			console.log($(this).val());
+		});
+	</script>
+</body>
+</html>

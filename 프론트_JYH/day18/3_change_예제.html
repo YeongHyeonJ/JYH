@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>change 중복체크</title>
+	<script src="../js/jquery.min.js"></script>
+
+</head>
+<body>
+	<input type="text" name="id">
+	<button id="check">중복체크</button> <br>
+	<button id="member">회원가입</button>
+
+	<script>
+
+		var isDuplicated = false;
+		$('input[type=text]').change(function(){
+			isDuplicated = false;
+		});
+		$('#check').click(function(){
+			if($('input[name=id]').val() == ''){
+				alert('아이디를 입력하세요.');
+				return;
+			}
+			isDuplicated = true;
+			alert('중복체크가 되었습니다.');
+		});
+
+		$('#member').click(function(){
+			if($('input[name=id]').val() == ''){
+				alert('아이디를 입력하세요.');
+				return;
+			}
+			if(isDuplicated){
+				alert('회원가입이 완료되었습니다.');
+			}else{					
+				alert('아이디 중복체크를 하세요.');
+			}	
+		});
+
+	</script>
+</body>
+</html>

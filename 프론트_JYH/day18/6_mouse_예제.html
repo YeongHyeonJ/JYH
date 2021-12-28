@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>mouse예제</title>
+	<script src="../js/jquery.min.js"></script>
+	<style>
+		.container{
+			margin: 0 auto; width: 100%; height: 100vh;
+			border: 1px solid black; box-sizing: border-box;
+		}
+		.box{
+			border: 1px solid red; position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+
+	</div>
+
+	<script>
+		var left, topY, width, height;
+		$('.container').mousedown(function(e){
+			var x = e.originalEvent.x;
+			var y = e.originalEvent.y;
+			$(this).append('<div class="box"></div>');
+			$(this).children().last().css({left:x, top:y, width:0, height:0});
+			left = x;
+			topY = y;
+		});
+		$('.container').mouseup(function(e){
+			var x = e.originalEvent.x;
+			var y = e.originalEvent.y;
+			var width = Math.abs(x - left);
+			var height = Math.abs(y - topY);
+			left = left < x ? left : x;
+			topY = topY < y ? topY : y;
+			$(this).children().last().css({right:x, bottom:y, width:width, height:height});
+		});
+	</script>
+</body>
+</html>

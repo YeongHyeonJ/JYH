@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>mouse예제</title>
+	<script src="../js/jquery.min.js"></script>
+	<style>
+		.container{
+			padding: 100px; border: 1px solid black;
+		}
+		.box{
+			height: 300px; border: 1px solid red;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box">
+			over 횟수 : <span class="over-count">0</span>
+			enter 횟수 : <span class="enter-count">0</span>
+			leave 횟수 : <span class="leave-count">0</span>
+			out 횟수 : <span class="out-count">0</span>
+		</div>
+	</div>
+
+	<script>
+		var overCount = 0, enterCount = 0;
+		var outCount = 0, leaveCount = 0;
+		$('.container').mouseover(function(){
+			overCount++;
+			$('.over-count').text(overCount);
+		});
+		$('.container').mouseenter(function(){
+			enterCount++;
+			$('.enter-count').text(enterCount);
+		});
+		$('.container').mouseleave(function(){
+			leaveCount++;
+			$('.leave-count').text(leaveCount);
+		});
+		$('.container').mouseout(function(){
+			outCount++;
+			$('.out-count').text(outCount);
+		});
+		$('.box').mouseover(function(e){
+			e.stopPropagation();
+		})
+		$('.box').mouseout(function(e){
+			e.stopPropagation();
+		})
+	</script>
+</body>
+</html>
