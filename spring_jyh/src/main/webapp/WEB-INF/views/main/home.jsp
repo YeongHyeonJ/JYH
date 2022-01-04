@@ -6,14 +6,14 @@
 <html>
 <head>
 	<title>Home</title>
+	
 </head>
 <body>
-<h1>
+
 	Hello world!  
 </h1>
-
 <P>  서버에서 보낸 데이터 ${serverTime}. </P>
-<a href="/spring/test?num=1&name=홍길동">데이터 전송</a>
+<a href="<%=request.getContextPath()%>/test?num=1&name=홍길동">데이터 전송</a>
 <form action="/spring/test/form" method=get>
 	<h1>Get 방식으로 전송</h1>
 	<input type="text" name="num" placeholder="번호"> <br>
