@@ -1,5 +1,5 @@
--- CREATE SCHEMA `community_jyh` ;
--- use `community_jyh`;
+ CREATE SCHEMA `community_jyh` ;
+ use `community_jyh`;
 CREATE TABLE `member` (
 	`me_id`			varchar(20)		NOT NULL,
 	`me_pw`			varchar(255)	NULL,
@@ -71,3 +71,4 @@ REFERENCES `board` (
 	`bd_num`
 );
 
+-- INSERT INTO `community_jyh`.`member` (`me_id`, `me_pw`, `me_name`, `me_gender`, `me_birth`, `me_address`, `me_phone`) VALUES ('abc123', 'abc123', 'abc', 'male', '2000-01-01', '충북 청주시', '010-2345-6789');

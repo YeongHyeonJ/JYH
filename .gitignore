@@ -46,3 +46,4 @@ atlassian-ide-plugin.xml
 
 log4j.xml
 *.class
+/.metadata/
