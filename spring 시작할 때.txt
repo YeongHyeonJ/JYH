@@ -1,3 +1,5 @@
+기본 블로그 참고 (stajun.tistory.com)
+
 기본 다운로드
 - Eclipse Marketplace에 가서 Spring Tools 3 Add가 다운되어있는지 확인
 - 톰캣 9.0버전을 구글에서 검색 후 다운로드 해준다 Core 맨위에 zip 클릭 후 다운 >> eclipse 다운폴더에 압축풀기
@@ -8,9 +10,27 @@
  spring Legacy Project를 선택하여 next
  spring MVC Project를 선택하여 next
  ex) kr.green.test 
+ ==> 패키지명 변경 kr.green.test >> kr.green.test.controller
  
 2. 톰캣 서버를 개설하여 연동해준다
  새로만들기 > server검색 > Apache > 톰캣 9.0서버 선택 > 이름설정 후 next > spring폴더 선택 후 Add해서 연동
 
 3. 한글 패치 
  windows > Preferences > en검색 > web > CSS, HTML, JSP 각각 선택후 Encoding을 UTF-8로 바꿔준다.
+
+4. welapp > WEB-INF > spring > appServlet > servelet-context.xml에서 base-package 수정
+ base-package="kr.green.test.controller"  >> "kr.green.test.*" //
+
+5. 인코딩 & 타일즈 설정 >> 블로그 참고
+
+6. 패키지 추가
+  src/main/java에서 dao,vo,service 패키지 추가
+ex)
+ (1) kr.green.test.dao
+ (2) kr.green.test.vo
+ (3) kr.green.test.service
+
+7. DB연동(블로그 참고)
+
+8. DB연동 테스트
+ ==> Service, ServiceImp, DAO, VO, Mapper 생성
