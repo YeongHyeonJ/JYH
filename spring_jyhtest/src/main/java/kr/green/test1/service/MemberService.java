@@ -6,6 +6,6 @@ public interface MemberService {
 
 	MemberVO login(MemberVO user);
 
-	MemberVO signup(MemberVO user);
+	boolean signup(MemberVO user);
 
 }

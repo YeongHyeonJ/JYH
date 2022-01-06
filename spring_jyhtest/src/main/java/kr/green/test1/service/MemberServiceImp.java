@@ -23,15 +23,19 @@ public class MemberServiceImp implements MemberService {
 	}
 
 	@Override
-	public MemberVO signup(MemberVO user) {
-		if(user == null || user.getMe_id() == null) {
-			return null;
-		}
-		MemberVO dbUser = memberDao.setMember(user.getMe_id(), user.getMe_pw()
-				, user.getMe_name(), user.getMe_gender()
-				, user.getMe_address(), user.getMe_phone());
-		System.out.println(dbUser);
-		return null;
+	public boolean signup(MemberVO user) {
+		if(user == null)
+			return false;
+		if(user.getMe_id()== null)
+			return false;
+		if(user.getMe_pw()== null)
+			return false;
+		// mySQL 저장된 자료를 가져왔는데 signup에서 입력한 id가 있을때
+		// 아이디 중복 검사
+		if(memberDao.getMember(user.getMe_id()) != null)
+			return false;
+		memberDao.insertMember(user);
+		return true;
 	}
 
 }
