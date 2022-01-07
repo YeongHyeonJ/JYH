@@ -53,6 +53,15 @@ public class BoardController {
 		mv.addObject("board",board);
 		return mv;
 	}
-
+	@RequestMapping(value="/delete", method=RequestMethod.GET)
+	public ModelAndView boardDeleteGet(ModelAndView mv, Integer bd_num, HttpServletRequest request) {
+		//게시글 번호 확인
+		//System.out.println(bd_num);
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		//System.out.println(user);
+		boardService.deleteBoard(bd_num,user);
+		mv.setViewName("redirect:/board/list");
+		return mv;
+	}
 
 }

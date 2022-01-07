@@ -11,9 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import kr.green.spring.service.MemberService;
 import kr.green.spring.vo.MemberVO;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
 public class HomeController {
 	
@@ -53,7 +50,6 @@ public class HomeController {
 	public ModelAndView signupGet(ModelAndView mv, MemberVO user) {
 		System.out.println("/signup:get :");
 		mv.setViewName("/member/signup");
-		mv.addObject("user",user);
 		return mv;
 	}
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)

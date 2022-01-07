@@ -36,6 +36,5 @@
 			  </a>
 		  </c:if>
 	</div>
-	${list}
 </body>
 </html>

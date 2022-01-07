@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import kr.green.spring.dao.BoardDAO;
 import kr.green.spring.vo.BoardVO;
+import kr.green.spring.vo.MemberVO;
 
 @Service
 public class BoardServiceImp implements BoardService{
@@ -35,5 +36,26 @@ public class BoardServiceImp implements BoardService{
 		if(bd_num == null || bd_num <= 0)
 			return null;
 		return boardDao.getBoard(bd_num);
+	}
+
+	@Override
+	public void deleteBoard(Integer bd_num, MemberVO user) {
+		if(bd_num == null || bd_num <= 0)
+			return;
+		
+		BoardVO board = boardDao.getBoard(bd_num);
+		
+		if(board == null )
+			return;
+		
+		if(!board.getBd_me_id().equals(user.getMe_id()))
+			return;
+		
+		boardDao.deleteBoard(bd_num);
+		
+//		board.setBd_del("Y");
+//		board.setBd_del_date(new Date());
+//		boardDao.updateBoard(board);
+		
 	}
 }
