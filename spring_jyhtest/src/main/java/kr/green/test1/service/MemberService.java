@@ -6,6 +6,9 @@ public interface MemberService {
 
 	MemberVO login(MemberVO user);
 
+<<<<<<< HEAD
 	boolean signup(MemberVO user);
 
+=======
+>>>>>>> parent of 5c05941 (spring day2 회원가입)
 }

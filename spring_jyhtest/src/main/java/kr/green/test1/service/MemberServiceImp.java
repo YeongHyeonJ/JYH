@@ -22,6 +22,7 @@ public class MemberServiceImp implements MemberService {
 		return null;
 	}
 
+<<<<<<< HEAD
 	@Override
 	public boolean signup(MemberVO user) {
 		if(user == null)
@@ -38,4 +39,6 @@ public class MemberServiceImp implements MemberService {
 		return true;
 	}
 
+=======
+>>>>>>> parent of 5c05941 (spring day2 회원가입)
 }

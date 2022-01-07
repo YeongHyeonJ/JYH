@@ -22,32 +22,14 @@ public class HomeController {
 	}
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginGet(ModelAndView mv) {
-		
 		mv.setViewName("/member/login");
 		return mv;
 	}
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView loginPost(ModelAndView mv, MemberVO user) {
 		memberService.login(user);
-		System.out.println(user);
+		
 		mv.setViewName("/member/login");
-		return mv;
-	}
-	@RequestMapping(value = "/signup", method = RequestMethod.GET)
-	public ModelAndView signupGet(ModelAndView mv) {
-		mv.setViewName("/member/signup");
-		return mv;
-	}
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
-	public ModelAndView signupPost(ModelAndView mv, MemberVO user) {
-		memberService.signup(user);
-		System.out.println(user);
-		mv.setViewName("/member/signup");
-		return mv;
-	}
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public ModelAndView testGet(ModelAndView mv) {
-		mv.setViewName("/member/test");
 		return mv;
 	}
 }

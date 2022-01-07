@@ -1,5 +1,7 @@
 package kr.green.spring.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class BoardController {
 
 	@RequestMapping(value="/list")
 	public ModelAndView boardList(ModelAndView mv) {
+		List<BoardVO> list = boardService.getBoardList("NORMAL");
+		mv.addObject("list",list);
+		System.out.println(list);
 		mv.setViewName("/board/list");
 		return mv;
 	}
@@ -37,6 +42,15 @@ public class BoardController {
 		System.out.println(board);
 		boardService.registerBoard(board);
 		mv.setViewName("/board/register");
+		return mv;
+	}
+	@RequestMapping(value="/detail")
+	public ModelAndView boardDetail(ModelAndView mv, Integer bd_num) {
+		mv.setViewName("/board/detail");
+		//System.out.println(bd_num);
+		BoardVO board = boardService.getBoard(bd_num);
+		System.out.println(board);
+		mv.addObject("board",board);
 		return mv;
 	}
 

@@ -8,7 +8,10 @@ public interface MemberDAO {
 
 	MemberVO getMember(@Param("me_id")String me_id);
 
+<<<<<<< HEAD
 	void insertMember(@Param("user")MemberVO user);
 
 
+=======
+>>>>>>> parent of 5c05941 (spring day2 회원가입)
 }
