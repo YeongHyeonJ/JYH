@@ -78,9 +78,13 @@ public class BoardController {
 		return mv;
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public ModelAndView boardModifyPost(ModelAndView mv) {
-		//System.out.println(bd_num);
-		mv.setViewName("redirect:/board/list");
+	public ModelAndView boardModifyPost(ModelAndView mv, BoardVO board) {
+		// 화면에서 수정한 게시글 정보가 넘어오는지 확인
+		System.out.println(board);
+		// 다오에게 게시글 정보를 주면서 업데이트 하라고 시킴
+		boardService.updateBoard(board);
+		mv.addObject("bd_num", board.getBd_num());
+		mv.setViewName("redirect:/board/detail");
 		return mv;
 	}
 

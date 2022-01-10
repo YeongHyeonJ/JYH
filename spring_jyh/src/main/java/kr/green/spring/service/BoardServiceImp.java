@@ -1,5 +1,6 @@
 package kr.green.spring.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,14 @@ public class BoardServiceImp implements BoardService{
 		if(board == null || !board.getBd_me_id().equals(user.getMe_id()))
 			return null;
 		return board;
+	}
+
+	@Override
+	public void updateBoard(BoardVO board) {
+		BoardVO dbBoard = boardDao.getBoard(board.getBd_num());
+		dbBoard.setBd_title(board.getBd_title());
+		dbBoard.setBd_contents(board.getBd_contents());
+		dbBoard.setBd_up_date(new Date());
+		boardDao.updateBoard(dbBoard);
 	}
 }

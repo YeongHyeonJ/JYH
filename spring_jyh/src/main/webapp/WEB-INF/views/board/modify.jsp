@@ -16,6 +16,7 @@
 		<div class="form-group">
 			<textarea class="form-control" name="bd_contents"  rows="10" >${board.bd_contents}</textarea>
 		</div>
+		<input type="hidden" name="bd_num" value="${board.bd_num}">
 		<button class="btn btn-outline-success col-12">수정</button>
 	</form>
 </body>
