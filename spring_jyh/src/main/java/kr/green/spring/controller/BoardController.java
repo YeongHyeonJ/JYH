@@ -25,7 +25,7 @@ public class BoardController {
 	public ModelAndView boardList(ModelAndView mv) {
 		List<BoardVO> list = boardService.getBoardList("NORMAL");
 		mv.addObject("list",list);
-		System.out.println(list);
+		//System.out.println(list);
 		mv.setViewName("/board/list");
 		return mv;
 	}
@@ -39,9 +39,9 @@ public class BoardController {
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		board.setBd_me_id(user.getMe_id());
 		board.setBd_type("NORMAL");
-		System.out.println(board);
+		//System.out.println(board);
 		boardService.registerBoard(board);
-		mv.setViewName("/board/register");
+		mv.setViewName("redirect:/board/list");
 		return mv;
 	}
 	@RequestMapping(value="/detail")
@@ -49,7 +49,7 @@ public class BoardController {
 		mv.setViewName("/board/detail");
 		//System.out.println(bd_num);
 		BoardVO board = boardService.getBoard(bd_num);
-		System.out.println(board);
+		//System.out.println(board);
 		mv.addObject("board",board);
 		return mv;
 	}
@@ -60,6 +60,26 @@ public class BoardController {
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		//System.out.println(user);
 		boardService.deleteBoard(bd_num,user);
+		mv.setViewName("redirect:/board/list");
+		return mv;
+	}
+	@RequestMapping(value="/modify", method=RequestMethod.GET)
+	public ModelAndView boardModifyGet(ModelAndView mv, Integer bd_num, HttpServletRequest request) {
+		//System.out.println(bd_num);
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		BoardVO board = boardService.getBoard(bd_num, user);
+		System.out.println(board);
+		if(board == null) {
+			mv.setViewName("redirect:/board/list");
+		}else {
+			mv.addObject("board", board);
+			mv.setViewName("/board/modify");
+		}
+		return mv;
+	}
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	public ModelAndView boardModifyPost(ModelAndView mv) {
+		//System.out.println(bd_num);
 		mv.setViewName("redirect:/board/list");
 		return mv;
 	}
