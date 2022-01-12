@@ -1,5 +1,7 @@
 package kr.green.green.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +37,41 @@ public class HomeController {
 	}
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView signupPost(ModelAndView mv, MemberVO user) {
-		System.out.println("/signup:post :" + user);
+		//System.out.println("/signup:post :" + user);
 		if(memberService.signup(user)) {
 			mv.setViewName("redirect:/");
 		}else{
 			mv.setViewName("redirect:/signup");
 		}
+		return mv;
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView loginGet(ModelAndView mv) {
+		//System.out.println("/login:get :");
+		mv.setViewName("/member/login");
+		return mv;
+	}
+	
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ModelAndView loginPost(ModelAndView mv, MemberVO member) {
+		//System.out.println("/login:post :" + member);
+		MemberVO user = memberService.login(member);
+		if(user == null) {
+			mv.setViewName("redirect:/login");
+		}else {
+			mv.addObject("user", user);
+			mv.setViewName("redirect:/");
+		}
+		
+		return mv;
+	}
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public ModelAndView logoutGet(ModelAndView mv, HttpServletRequest request) {
+		//System.out.println("/logout:get :");
+		//세션에 있는 user 정보를 삭제
+		request.getSession().removeAttribute("user");
+		mv.setViewName("redirect:/");
 		return mv;
 	}
 	
