@@ -1,5 +1,6 @@
 package kr.green.spring.service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class BoardServiceImp implements BoardService{
 	
 	@Autowired
 	BoardDAO boardDao;
-	
+	//집
 	String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
 	@Override
 	public void registerBoard(BoardVO board, List<MultipartFile> files) throws Exception {
@@ -41,6 +42,7 @@ public class BoardServiceImp implements BoardService{
 				FileVO fileVo = 
 						new FileVO(tmpFile.getOriginalFilename(), path, board.getBd_num());
 				System.out.println(fileVo);
+				boardDao.insertFile(fileVo);
 			}
 		}
 		
@@ -97,5 +99,13 @@ public class BoardServiceImp implements BoardService{
 		dbBoard.setBd_contents(board.getBd_contents());
 		dbBoard.setBd_up_date(new Date());
 		boardDao.updateBoard(dbBoard);
+	}
+
+	@Override
+	public List<FileVO> getFileList(Integer bd_num) {
+		if(bd_num == null || bd_num <= 0)
+			return null;
+		
+		return boardDao.selectFileList(bd_num);
 	}
 }

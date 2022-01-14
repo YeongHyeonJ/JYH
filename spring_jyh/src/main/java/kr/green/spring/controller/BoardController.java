@@ -1,19 +1,27 @@
 package kr.green.spring.controller;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.green.spring.service.BoardService;
-import kr.green.spring.utils.UploadFileUtils;
 import kr.green.spring.vo.BoardVO;
+import kr.green.spring.vo.FileVO;
 import kr.green.spring.vo.MemberVO;
 
 @Controller
@@ -52,8 +60,11 @@ public class BoardController {
 		mv.setViewName("/board/detail");
 		//System.out.println(bd_num);
 		BoardVO board = boardService.getBoard(bd_num);
+		List<FileVO> files = boardService.getFileList(bd_num);
 		//System.out.println(board);
-		mv.addObject("board",board);
+		mv.addObject("board", board);
+		mv.addObject("files", files);
+		System.out.println(files);
 		return mv;
 	}
 	@RequestMapping(value="/delete", method=RequestMethod.GET)
@@ -89,6 +100,30 @@ public class BoardController {
 		mv.addObject("bd_num", board.getBd_num());
 		mv.setViewName("redirect:/board/detail");
 		return mv;
+	}
+	@ResponseBody
+	@RequestMapping("/download")
+	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{
+	   String uploadPath = "C:\\\\Users\\\\dudgu\\\\OneDrive\\\\바탕 화면\\\\GIT\\\\upload";
+		InputStream in = null;
+	    ResponseEntity<byte[]> entity = null;
+	    try{
+	        String FormatName = fileName.substring(fileName.lastIndexOf(".")+1);
+	        HttpHeaders headers = new HttpHeaders();
+	        in = new FileInputStream(uploadPath+fileName);
+
+	        fileName = fileName.substring(fileName.indexOf("_")+1);
+	        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	        headers.add("Content-Disposition",  "attachment; filename=\"" 
+				+ new String(fileName.getBytes("UTF-8"), "ISO-8859-1")+"\"");
+	        entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in),headers,HttpStatus.CREATED);
+	    }catch(Exception e) {
+	        e.printStackTrace();
+	        entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+	    }finally {
+	        in.close();
+	    }
+	    return entity;
 	}
 
 }

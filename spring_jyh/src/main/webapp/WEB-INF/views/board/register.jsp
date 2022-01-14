@@ -16,6 +16,13 @@
 			<div class="form-group">
 				<textarea class="form-control" name="bd_contents" placeholder="내용" rows="10"></textarea>
 			</div>
+			<div class="form-group">
+				<label>첨부파일(최대 3개)</label>
+				<input type="file" class="form-control" name="files" >
+				<input type="file" class="form-control" name="files" >
+				<input type="file" class="form-control" name="files" >
+			</div>
+		
 			<button class="btn btn-outline-success col-12">등록</button>
 		</form>
 	</div>
