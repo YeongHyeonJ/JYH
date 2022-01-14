@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import kr.green.spring.service.BoardService;
+import kr.green.spring.utils.UploadFileUtils;
 import kr.green.spring.vo.BoardVO;
 import kr.green.spring.vo.MemberVO;
 
@@ -35,12 +37,13 @@ public class BoardController {
 		return mv;
 	}
 	@RequestMapping(value="/register", method=RequestMethod.POST)
-	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVO board, HttpServletRequest request) {
+	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVO board, 
+			HttpServletRequest request, List<MultipartFile> files) throws Exception {
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		board.setBd_me_id(user.getMe_id());
 		board.setBd_type("NORMAL");
 		//System.out.println(board);
-		boardService.registerBoard(board);
+		boardService.registerBoard(board, files);
 		mv.setViewName("redirect:/board/list");
 		return mv;
 	}
@@ -80,7 +83,7 @@ public class BoardController {
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public ModelAndView boardModifyPost(ModelAndView mv, BoardVO board) {
 		// 화면에서 수정한 게시글 정보가 넘어오는지 확인
-		System.out.println(board);
+		//System.out.println(board);
 		// 다오에게 게시글 정보를 주면서 업데이트 하라고 시킴
 		boardService.updateBoard(board);
 		mv.addObject("bd_num", board.getBd_num());

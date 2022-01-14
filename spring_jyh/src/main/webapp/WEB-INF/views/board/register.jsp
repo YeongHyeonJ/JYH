@@ -9,7 +9,7 @@
 <body>
 	<div class="body container">
 		<h1>게시글 등록</h1>
-		<form action="<%=request.getContextPath()%>/board/register" method="post">
+		<form action="<%=request.getContextPath()%>/board/register" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<input type="text" class="form-control" name="bd_title" placeholder="제목">
 			</div>

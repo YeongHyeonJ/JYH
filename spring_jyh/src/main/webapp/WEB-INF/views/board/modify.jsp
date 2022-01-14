@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form class="body container" action="<%=request.getContextPath()%>/board/modify" method="post">
+	<form class="body container" action="<%=request.getContextPath()%>/board/modify" method="post" enctype="multipart/form-data">
 		<h1>게시글 수정</h1>
 		<div class="form-group">
 			<input type="text" class="form-control" name="bd_title" value="${board.bd_title}">
@@ -16,6 +16,13 @@
 		<div class="form-group">
 			<textarea class="form-control" name="bd_contents"  rows="10" >${board.bd_contents}</textarea>
 		</div>
+		<div class="form-group">
+		<label>첨부파일(최대 3개)</label>
+			<input type="file" class="form-control" name="files" >
+			<input type="file" class="form-control" name="files" >
+			<input type="file" class="form-control" name="files" >
+		</div>
+		
 		<input type="hidden" name="bd_num" value="${board.bd_num}">
 		<button class="btn btn-outline-success col-12">수정</button>
 	</form>
