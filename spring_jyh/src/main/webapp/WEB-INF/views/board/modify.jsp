@@ -16,15 +16,33 @@
 		<div class="form-group">
 			<textarea class="form-control" name="bd_contents"  rows="10" >${board.bd_contents}</textarea>
 		</div>
-		<div class="form-group">
-		<label>첨부파일(최대 3개)</label>
-			<input type="file" class="form-control" name="files" >
-			<input type="file" class="form-control" name="files" >
-			<input type="file" class="form-control" name="files" >
+		<div class="form-group attachment">
+			<label>첨부파일(최대 3개)</label>
+			<c:forEach items="${fileList}" var="file">			
+				<div class="form-control">
+					<input type="hidden" name="fileNums" value="${file.fi_num}">	
+					<span>${file.fi_ori_name}</span>
+					<a class="btn-close" href="#">x</a>
+				</div>
+			</c:forEach>
+			<c:forEach begin="1" end="${3-fileList.size() }">
+				<input type="file" class="form-control" name="files" >	
+			</c:forEach>
 		</div>
 		
 		<input type="hidden" name="bd_num" value="${board.bd_num}">
 		<button class="btn btn-outline-success col-12">수정</button>
 	</form>
+	<script type="text/javascript">
+		$(function(){
+			$('.attachment .btn-close').click(function(e) {
+				e.preventDefault();
+				$(this).parent().remove();
+				var str = '<input type="file" class="form-control" name="files" >';
+				$('.attachment').append(str);
+			})
+		})
+	
+	</script>
 </body>
 </html>

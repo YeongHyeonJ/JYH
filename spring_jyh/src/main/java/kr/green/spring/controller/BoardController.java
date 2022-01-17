@@ -2,6 +2,7 @@ package kr.green.spring.controller;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,7 @@ public class BoardController {
 		//System.out.println(board);
 		mv.addObject("board", board);
 		mv.addObject("files", files);
-		System.out.println(files);
+		//System.out.println(files);
 		return mv;
 	}
 	@RequestMapping(value="/delete", method=RequestMethod.GET)
@@ -82,21 +83,29 @@ public class BoardController {
 		//System.out.println(bd_num);
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		BoardVO board = boardService.getBoard(bd_num, user);
-		System.out.println(board);
+		//System.out.println(board);
 		if(board == null) {
 			mv.setViewName("redirect:/board/list");
 		}else {
+			List<FileVO> fileList = boardService.getFileList(bd_num);
+			mv.addObject("fileList",fileList);
 			mv.addObject("board", board);
 			mv.setViewName("/board/modify");
 		}
 		return mv;
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
-	public ModelAndView boardModifyPost(ModelAndView mv, BoardVO board) {
+	public ModelAndView boardModifyPost(ModelAndView mv, BoardVO board,
+			List<MultipartFile> files, Integer [] fileNums) {
+		// 기존 첨부파일 번호인 fileNums 확인
+//		if(fileNums != null) {
+//			for(Integer tmp : fileNums)
+//				System.out.println(tmp);
+//		}
 		// 화면에서 수정한 게시글 정보가 넘어오는지 확인
 		//System.out.println(board);
 		// 다오에게 게시글 정보를 주면서 업데이트 하라고 시킴
-		boardService.updateBoard(board);
+		boardService.updateBoard(board, files, fileNums);
 		mv.addObject("bd_num", board.getBd_num());
 		mv.setViewName("redirect:/board/detail");
 		return mv;

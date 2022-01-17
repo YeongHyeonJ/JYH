@@ -29,13 +29,13 @@ public class HomeController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView loginGet(ModelAndView mv) {
-		System.out.println("/login:get :");
+		//System.out.println("/login:get :");
 		mv.setViewName("/member/login");
 		return mv;
 	}
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView loginPost(ModelAndView mv, MemberVO member) {
-		System.out.println("/login:post :" + member);
+		//System.out.println("/login:post :" + member);
 		MemberVO user = memberService.login(member);
 		if(user == null) {
 			mv.setViewName("redirect:/login");
@@ -48,13 +48,13 @@ public class HomeController {
 	}
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public ModelAndView signupGet(ModelAndView mv, MemberVO user) {
-		System.out.println("/signup:get :");
+		//System.out.println("/signup:get :");
 		mv.setViewName("/member/signup");
 		return mv;
 	}
 	@RequestMapping(value = "/signup", method = RequestMethod.POST)
 	public ModelAndView signupPost(ModelAndView mv, MemberVO user) {
-		System.out.println("/signup:post :" + user);
+		//System.out.println("/signup:post :" + user);
 		if(memberService.signup(user)) {
 			mv.setViewName("redirect:/");
 		}else{
@@ -64,7 +64,7 @@ public class HomeController {
 	}
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ModelAndView logoutGet(ModelAndView mv, HttpServletRequest request) {
-		System.out.println("/logout:get :");
+		//System.out.println("/logout:get :");
 		//세션에 있는 user 정보를 삭제
 		request.getSession().removeAttribute("user");
 		mv.setViewName("redirect:/");

@@ -1,6 +1,7 @@
 package kr.green.spring.service;
 
-import java.io.IOException;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -93,12 +94,58 @@ public class BoardServiceImp implements BoardService{
 	}
 
 	@Override
-	public void updateBoard(BoardVO board) {
+	public void updateBoard(BoardVO board, List<MultipartFile> files, Integer[] fileNums) {
 		BoardVO dbBoard = boardDao.getBoard(board.getBd_num());
 		dbBoard.setBd_title(board.getBd_title());
 		dbBoard.setBd_contents(board.getBd_contents());
 		dbBoard.setBd_up_date(new Date());
 		boardDao.updateBoard(dbBoard);
+		
+		//게시글 번호와 일치하는 첨부파일 전부 가져오기
+		List<FileVO> fileList = boardDao.selectFileList(board.getBd_num());
+		if(fileList != null && fileList.size() != 0
+				&& fileNums != null && fileNums.length != 0) {
+			List<FileVO> delList = new ArrayList<FileVO>();
+			for(FileVO tmpFileVo : fileList) {
+				for(Integer tmp : fileNums) {
+					if(tmpFileVo.getFi_num() == tmp) {
+						delList.add(tmpFileVo);
+					}
+				}
+			}
+			fileList.removeAll(delList);
+		}
+		if(fileList != null && fileList.size() != 0) {
+			for(FileVO tmpFileVo : fileList) {
+				File f =
+					new File(uploadPath+tmpFileVo.getFi_name().replace("/", File.separator));
+				if(f.exists()) {
+					f.delete();
+				}
+				boardDao.deleteFile(tmpFileVo.getFi_num());
+			}
+		}
+		if(files == null)
+			return;
+		for(MultipartFile tmpFile : files) {
+			// 첨부파일 업로드와 DB에 저장
+			// UploadFileUtils.uploadFile(업로드 경로, 파일명, 파일데이터)
+			// 첨부파일이 있고, 첨부파일 이름이 1글자 이상인 경우에만 업로드
+			if(tmpFile != null && tmpFile.getOriginalFilename().length() != 0) {
+				try {
+					String path = UploadFileUtils.uploadFile(
+							uploadPath, tmpFile.getOriginalFilename(), tmpFile.getBytes());
+					FileVO fileVo = 
+							new FileVO(tmpFile.getOriginalFilename(), path, board.getBd_num());
+					System.out.println(fileVo);
+					boardDao.insertFile(fileVo);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}
+		
 	}
 
 	@Override
