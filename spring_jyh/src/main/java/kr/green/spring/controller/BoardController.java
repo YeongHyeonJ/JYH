@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import kr.green.spring.pagination.Criteria;
+import kr.green.spring.pagination.PageMaker;
 import kr.green.spring.service.BoardService;
 import kr.green.spring.vo.BoardVO;
 import kr.green.spring.vo.FileVO;
@@ -33,8 +35,15 @@ public class BoardController {
 	BoardService boardService;
 
 	@RequestMapping(value="/list")
-	public ModelAndView boardList(ModelAndView mv) {
-		List<BoardVO> list = boardService.getBoardList("NORMAL");
+	public ModelAndView boardList(ModelAndView mv,Criteria cri) {
+		//보이는 게시글 수
+		cri.setPerPageNum(3);
+		List<BoardVO> list = boardService.getBoardList("NORMAL", cri);
+		//페이지 메이커를 만들어야함
+		int totalCount = boardService.getTotalCount("NORMAL");
+		PageMaker pm = new PageMaker(totalCount, 5, cri);
+		mv.addObject("pm",pm);
+		
 		mv.addObject("list",list);
 		//System.out.println(list);
 		mv.setViewName("/board/list");
