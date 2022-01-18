@@ -21,7 +21,9 @@ public class BoardServiceImp implements BoardService{
 	@Autowired
 	BoardDAO boardDao;
 	//집
-	String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
+	//String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
+	//학원
+	String uploadPath = "D:\\JAVA_JYH\\upload";
 	@Override
 	public void registerBoard(BoardVO board, List<MultipartFile> files) throws Exception {
 		if(board == null 
@@ -31,21 +33,7 @@ public class BoardServiceImp implements BoardService{
 			return;
 		// Mapper 수정
 		boardDao.insertBoard(board);
-		if(files == null)
-			return;
-		for(MultipartFile tmpFile : files) {
-			// 첨부파일 업로드와 DB에 저장
-			// UploadFileUtils.uploadFile(업로드 경로, 파일명, 파일데이터)
-			// 첨부파일이 있고, 첨부파일 이름이 1글자 이상인 경우에만 업로드
-			if(tmpFile != null && tmpFile.getOriginalFilename().length() != 0) {
-				String path = UploadFileUtils.uploadFile(
-						uploadPath, tmpFile.getOriginalFilename(), tmpFile.getBytes());
-				FileVO fileVo = 
-						new FileVO(tmpFile.getOriginalFilename(), path, board.getBd_num());
-				System.out.println(fileVo);
-				boardDao.insertFile(fileVo);
-			}
-		}
+		uploadFile(files, board.getBd_num());
 		
 	}
 
@@ -81,6 +69,8 @@ public class BoardServiceImp implements BoardService{
 //		board.setBd_del_date(new Date());
 //		boardDao.updateBoard(board);
 		
+		List<FileVO> fileList = boardDao.selectFileList(bd_num);
+		deleteFile(fileList);
 	}
 
 	@Override
@@ -103,11 +93,12 @@ public class BoardServiceImp implements BoardService{
 		
 		//게시글 번호와 일치하는 첨부파일 전부 가져오기
 		List<FileVO> fileList = boardDao.selectFileList(board.getBd_num());
-		if(fileList != null && fileList.size() != 0
+		
+		if(fileList != null && fileList.size() != 0 
 				&& fileNums != null && fileNums.length != 0) {
 			List<FileVO> delList = new ArrayList<FileVO>();
 			for(FileVO tmpFileVo : fileList) {
-				for(Integer tmp : fileNums) {
+				for(Integer tmp: fileNums) {
 					if(tmpFileVo.getFi_num() == tmp) {
 						delList.add(tmpFileVo);
 					}
@@ -115,36 +106,9 @@ public class BoardServiceImp implements BoardService{
 			}
 			fileList.removeAll(delList);
 		}
-		if(fileList != null && fileList.size() != 0) {
-			for(FileVO tmpFileVo : fileList) {
-				File f =
-					new File(uploadPath+tmpFileVo.getFi_name().replace("/", File.separator));
-				if(f.exists()) {
-					f.delete();
-				}
-				boardDao.deleteFile(tmpFileVo.getFi_num());
-			}
-		}
-		if(files == null)
-			return;
-		for(MultipartFile tmpFile : files) {
-			// 첨부파일 업로드와 DB에 저장
-			// UploadFileUtils.uploadFile(업로드 경로, 파일명, 파일데이터)
-			// 첨부파일이 있고, 첨부파일 이름이 1글자 이상인 경우에만 업로드
-			if(tmpFile != null && tmpFile.getOriginalFilename().length() != 0) {
-				try {
-					String path = UploadFileUtils.uploadFile(
-							uploadPath, tmpFile.getOriginalFilename(), tmpFile.getBytes());
-					FileVO fileVo = 
-							new FileVO(tmpFile.getOriginalFilename(), path, board.getBd_num());
-					System.out.println(fileVo);
-					boardDao.insertFile(fileVo);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-			}
-		}
+		deleteFile(fileList);
+		uploadFile(files, board.getBd_num());
+		
 		
 	}
 
@@ -154,5 +118,35 @@ public class BoardServiceImp implements BoardService{
 			return null;
 		
 		return boardDao.selectFileList(bd_num);
+	}
+	
+	private void uploadFile(List<MultipartFile>files, Integer bd_num) {
+		if(files == null)
+			return;
+		for(MultipartFile tmpFile : files) {
+			if(tmpFile != null && tmpFile.getOriginalFilename().length() !=0) {
+				try {
+					String path = UploadFileUtils.uploadFile(
+						uploadPath, tmpFile.getOriginalFilename(), tmpFile.getBytes());
+					FileVO fileVo = 
+						new FileVO(tmpFile.getOriginalFilename(), path, bd_num);
+					boardDao.insertFile(fileVo);
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	private void deleteFile(List<FileVO> fileList) {
+		if(fileList != null && fileList.size() != 0) {
+			for(FileVO tmpFileVo : fileList) {
+				File f = 
+					new File(uploadPath+tmpFileVo.getFi_name().replace("/", File.separator));
+				if(f.exists()) {
+					f.delete();
+				}
+				boardDao.deleteFile(tmpFileVo.getFi_num());
+			}
+		}
 	}
 }
