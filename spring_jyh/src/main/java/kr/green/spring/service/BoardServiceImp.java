@@ -39,9 +39,9 @@ public class BoardServiceImp implements BoardService{
 	}
 
 	@Override
-	public List<BoardVO> getBoardList(String type, Criteria cri) {
+	public List<BoardVO> getBoardList(Criteria cri) {
 		
-		return boardDao.getBoardList(type, cri);
+		return boardDao.getBoardList(cri);
 	}
 
 	@Override
@@ -152,9 +152,9 @@ public class BoardServiceImp implements BoardService{
 	}
 
 	@Override
-	public int getTotalCount(String type) {
+	public int getTotalCount(Criteria cri) {
 		// TODO Auto-generated method stub
-		return boardDao.selectCountBoard(type);
+		return boardDao.selectCountBoard(cri);
 	}
 
 }

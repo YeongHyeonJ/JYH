@@ -12,7 +12,7 @@ public interface BoardDAO {
 
 	void insertBoard(@Param("board")BoardVO board);
 
-	List<BoardVO> getBoardList(@Param("type")String type, @Param("cri")Criteria cri);
+	List<BoardVO> getBoardList(@Param("cri")Criteria cri);
 
 	BoardVO getBoard(@Param("bd_num")Integer bd_num);
 
@@ -26,7 +26,8 @@ public interface BoardDAO {
 
 	void deleteFile(@Param("fi_num")int fi_num);
 
-	int selectCountBoard(@Param("type")String type);
+	int selectCountBoard(@Param("cri")Criteria cri);
+	
 	
 
 }

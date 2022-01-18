@@ -37,10 +37,10 @@ public class BoardController {
 	@RequestMapping(value="/list")
 	public ModelAndView boardList(ModelAndView mv,Criteria cri) {
 		//보이는 게시글 수
-		cri.setPerPageNum(3);
-		List<BoardVO> list = boardService.getBoardList("NORMAL", cri);
+		cri.setPerPageNum(6);
+		List<BoardVO> list = boardService.getBoardList( cri);
 		//페이지 메이커를 만들어야함
-		int totalCount = boardService.getTotalCount("NORMAL");
+		int totalCount = boardService.getTotalCount( cri);
 		PageMaker pm = new PageMaker(totalCount, 5, cri);
 		mv.addObject("pm",pm);
 		
@@ -50,18 +50,22 @@ public class BoardController {
 		return mv;
 	}
 	@RequestMapping(value="/register", method=RequestMethod.GET)
-	public ModelAndView boardRegisterGet(ModelAndView mv) {
+	public ModelAndView boardRegisterGet(ModelAndView mv,
+			Integer bd_ori_num, String bd_type) {
+		mv.addObject("bd_type",bd_type);
+		mv.addObject("bd_ori_num",bd_ori_num);
 		mv.setViewName("/board/register");
 		return mv;
 	}
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVO board, 
-			HttpServletRequest request, List<MultipartFile> files) throws Exception {
+			HttpServletRequest request, List<MultipartFile> files2) throws Exception {
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		board.setBd_me_id(user.getMe_id());
-		board.setBd_type("NORMAL");
+		
 		//System.out.println(board);
-		boardService.registerBoard(board, files);
+		boardService.registerBoard(board, files2);
+		mv.addObject("type", board.getBd_type());
 		mv.setViewName("redirect:/board/list");
 		return mv;
 	}
@@ -105,7 +109,7 @@ public class BoardController {
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public ModelAndView boardModifyPost(ModelAndView mv, BoardVO board,
-			List<MultipartFile> files, Integer [] fileNums) {
+			List<MultipartFile> files2, Integer [] fileNums) {
 		// 기존 첨부파일 번호인 fileNums 확인
 //		if(fileNums != null) {
 //			for(Integer tmp : fileNums)
@@ -114,7 +118,7 @@ public class BoardController {
 		// 화면에서 수정한 게시글 정보가 넘어오는지 확인
 		//System.out.println(board);
 		// 다오에게 게시글 정보를 주면서 업데이트 하라고 시킴
-		boardService.updateBoard(board, files, fileNums);
+		boardService.updateBoard(board, files2, fileNums);
 		mv.addObject("bd_num", board.getBd_num());
 		mv.setViewName("redirect:/board/detail");
 		return mv;

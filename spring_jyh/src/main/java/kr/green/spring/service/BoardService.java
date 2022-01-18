@@ -13,7 +13,7 @@ public interface BoardService {
 
 	void registerBoard(BoardVO board, List<MultipartFile> files) throws Exception;
 
-	List<BoardVO> getBoardList(String string, Criteria cri);
+	List<BoardVO> getBoardList(Criteria cri);
 
 	BoardVO getBoard(Integer bd_num);
 
@@ -25,6 +25,6 @@ public interface BoardService {
 
 	void updateBoard(BoardVO board, List<MultipartFile> files, Integer[] fileNums);
 
-	int getTotalCount(String type);
+	int getTotalCount(Criteria cri);
 
 }

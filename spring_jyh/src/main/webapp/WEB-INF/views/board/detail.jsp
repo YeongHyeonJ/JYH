@@ -10,8 +10,12 @@
 <body>
 	<div class="body container">
 		<c:if test="${board != null}">
-			<h1>게시글 상세</h1>
-			
+			<c:if test="${board.bd_type == 'NORMAL'}">
+				<h1>게시글 상세</h1>
+			</c:if>
+			<c:if test="${board.bd_type != 'NORMAL'}">
+				<h1>게시글 상세</h1>
+			</c:if>
 			<div class="form-group">
 				<input type="text" class="form-control" name="bd_title"  readonly value="${board.bd_title}">
 			</div>
@@ -22,7 +26,7 @@
 				<input type="text" class="form-control" name="bd_reg_date"  readonly value="${board.bd_reg_date_str}">
 			</div>
 			<div class="form-group">
-				<textarea class="form-control" name="bd_contents"  rows="10" readonly>${board.bd_contents}</textarea>
+				<div class="form-control" style="min-height:300px; height:auto;">${board.bd_contents}</div>
 			</div>
 			<div class="form-group">
 				<c:if test="${files != null && files.size() != 0}">
@@ -42,7 +46,13 @@
 				<a href="<%=request.getContextPath()%>/board/delete?bd_num=${board.bd_num}">
 					<button class="btn btn-outline-success">삭제</button>
 				</a>
+				
 			</c:if>
+			<c:if test="${board.bd_type != '공지' && board.bd_num == board.bd_ori_num }">
+					<a href="<%=request.getContextPath()%>/board/register?bd_ori_num=${board.bd_num}">
+						<button class="btn btn-outline-success">답글</button>
+					</a>
+				</c:if>
 			<c:if test="${board == null}">
 				<h1>없는 게시글이거나 삭제된 게시글입니다.</h1>
 			</c:if>
