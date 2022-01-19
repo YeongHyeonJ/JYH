@@ -22,9 +22,9 @@ public class BoardServiceImp implements BoardService{
 	@Autowired
 	BoardDAO boardDao;
 	//집
-	//String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
+	String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
 	//학원
-	String uploadPath = "D:\\JAVA_JYH\\upload";
+	//String uploadPath = "D:\\JAVA_JYH\\upload";
 	@Override
 	public void registerBoard(BoardVO board, List<MultipartFile> files) throws Exception {
 		if(board == null 
@@ -64,6 +64,14 @@ public class BoardServiceImp implements BoardService{
 		if(!board.getBd_me_id().equals(user.getMe_id()))
 			return;
 		
+	
+		List<String> authorityAdmin = new ArrayList<String>();
+		authorityAdmin.add("관리자");
+		authorityAdmin.add("슈퍼 관리자");
+		if(	board.getBd_type().equals("공지") &&
+				authorityAdmin.indexOf(user.getMe_authority()) < 0) {
+			return;
+		}
 		boardDao.deleteBoard(bd_num);
 		
 //		board.setBd_del("Y");
@@ -155,6 +163,12 @@ public class BoardServiceImp implements BoardService{
 	public int getTotalCount(Criteria cri) {
 		// TODO Auto-generated method stub
 		return boardDao.selectCountBoard(cri);
+	}
+
+	@Override
+	public void updateViews(Integer bd_num) {
+		boardDao.updateViews(bd_num);
+		
 	}
 
 }

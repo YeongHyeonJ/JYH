@@ -27,6 +27,8 @@ public interface BoardDAO {
 	void deleteFile(@Param("fi_num")int fi_num);
 
 	int selectCountBoard(@Param("cri")Criteria cri);
+
+	void updateViews(@Param("bd_num")Integer bd_num);
 	
 	
 

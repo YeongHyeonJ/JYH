@@ -60,13 +60,23 @@ public class BoardController {
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVO board, 
 			HttpServletRequest request, List<MultipartFile> files2) throws Exception {
+		
+		//공지를 작성할때 관리자와 슈퍼관리자만 작성하도록 하는 코드
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		board.setBd_me_id(user.getMe_id());
-		
+		List<String> authorityAdmin = new ArrayList<String>();
+		authorityAdmin.add("관리자");
+		authorityAdmin.add("슈퍼 관리자");
+		if(	board.getBd_type().equals("공지") &&
+				authorityAdmin.indexOf(user.getMe_authority()) < 0) {
+			mv.addObject("type", "공지");
+			mv.setViewName("redirect:/board/list");
+		}else {
+			boardService.registerBoard(board, files2);
+			mv.addObject("type", board.getBd_type());
+			mv.setViewName("redirect:/board/list");
+		}
 		//System.out.println(board);
-		boardService.registerBoard(board, files2);
-		mv.addObject("type", board.getBd_type());
-		mv.setViewName("redirect:/board/list");
 		return mv;
 	}
 	@RequestMapping(value="/detail")
@@ -75,6 +85,7 @@ public class BoardController {
 		//System.out.println(bd_num);
 		BoardVO board = boardService.getBoard(bd_num);
 		List<FileVO> files = boardService.getFileList(bd_num);
+		boardService.updateViews(bd_num);
 		//System.out.println(board);
 		mv.addObject("board", board);
 		mv.addObject("files", files);
@@ -97,6 +108,7 @@ public class BoardController {
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		BoardVO board = boardService.getBoard(bd_num, user);
 		//System.out.println(board);
+		
 		if(board == null) {
 			mv.setViewName("redirect:/board/list");
 		}else {
@@ -109,18 +121,20 @@ public class BoardController {
 	}
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	public ModelAndView boardModifyPost(ModelAndView mv, BoardVO board,
-			List<MultipartFile> files2, Integer [] fileNums) {
+			List<MultipartFile> files2, Integer [] fileNums,
+			HttpServletRequest request) {
 		// 기존 첨부파일 번호인 fileNums 확인
 //		if(fileNums != null) {
 //			for(Integer tmp : fileNums)
 //				System.out.println(tmp);
 //		}
-		// 화면에서 수정한 게시글 정보가 넘어오는지 확인
-		//System.out.println(board);
 		// 다오에게 게시글 정보를 주면서 업데이트 하라고 시킴
 		boardService.updateBoard(board, files2, fileNums);
 		mv.addObject("bd_num", board.getBd_num());
 		mv.setViewName("redirect:/board/detail");
+		// 화면에서 수정한 게시글 정보가 넘어오는지 확인
+		//System.out.println(board);
+		
 		return mv;
 	}
 	@ResponseBody
