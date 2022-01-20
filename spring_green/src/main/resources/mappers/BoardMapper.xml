@@ -3,11 +3,70 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.green.green.dao.BoardDAO">
+	
+	<insert id="insertBoard"
+			useGeneratedKeys="true" 
+			keyProperty="board.bd_num"
+			parameterType="kr.green.green.vo.BoardVO">
+			<if test="board.bd_ori_num == 0">
+			insert into board(bd_title, bd_contents, bd_reg_date,
+					bd_type, bd_me_id, bd_ori_num, bd_del)
+			select #{board.bd_title}, #{board.bd_contents}, now(),
+					#{board.bd_type}, #{board.bd_me_id},
+					ifnull(max(bd_num),0)+1, 'N'
+					from board;
+			</if>
+			<if test="board.bd_ori_num != 0 ">
+			insert into board(bd_title, bd_contents, bd_reg_date,
+					bd_type, bd_me_id, bd_ori_num, bd_del)
+			values(#{board.bd_title}, #{board.bd_contents}, now(),
+					#{board.bd_type}, #{board.bd_me_id},
+					#{board.bd_ori_num}, 'N')
+			</if>
+	</insert>
 	<select id="getBoardList" resultType="kr.green.green.vo.BoardVO">
-		select * from board where bd_type = #{type} and bd_del = 'N' order by bd_num desc
+		select * from board where bd_type = #{cri.type} and bd_del = 'N' 
+			and bd_title like concat('%',#{cri.search},'%')
+			order by bd_ori_num desc, bd_num asc
+			limit #{cri.pageStart}, #{cri.perPageNum}
 	</select>
 	<select id="getBoard" resultType="kr.green.green.vo.BoardVO">
 		select * from board where bd_num = #{bd_num}
 	</select>
+	<update id="deleteBoard">
+		update board set
+			bd_del = 'Y',
+			bd_del_date = now()
+		where bd_num = #{bd_num}
+	</update>
+	<select id="selectFileList" resultType="kr.green.green.vo.FileVO">
+		select * from file where fi_bd_num = #{bd_num} and (fi_del != 'Y' || fi_del is null)
+	</select>
+	<update id="updateBoard">
+		update board set
+			bd_title = #{board.bd_title},
+			bd_contents = #{board.bd_contents},
+			bd_up_date = now()
+		where bd_num = #{board.bd_num}
+	</update>
+	<insert id="insertFile">
+		insert into file(fi_ori_name, fi_name, fi_bd_num)
+			values(#{file.fi_ori_name},#{file.fi_name},#{file.fi_bd_num})
+	</insert>
+	<update id="deleteFile">
+		update file set
+			fi_del = 'Y',
+			fi_del_date = now()
+		where fi_num = #{fi_num}
+	</update>
+	<select id="selectCountBoard" resultType="int">
+		select count(*) from board where bd_type = #{cri.type} and bd_del = 'N' 
+			and bd_title like concat('%',#{cri.search},'%')
+	</select>
+	<update id="updateViews">
+		update board set
+			bd_views = bd_views+1
+		where bd_num = #{bd_num}
+	</update>
 
 </mapper>

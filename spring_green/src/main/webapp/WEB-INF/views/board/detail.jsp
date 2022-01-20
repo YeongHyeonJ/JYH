@@ -10,8 +10,12 @@
 <body>
 	<div class="body container">
 		<c:if test="${board != null}">
-			<h1>게시글 상세</h1>
-			
+			<c:if test="${board.bd_type == 'NORMAL'}">
+				<h1>게시글 상세</h1>
+			</c:if>
+			<c:if test="${board.bd_type != 'NORMAL'}">
+				<h1>게시글 상세</h1>
+			</c:if>
 			<div class="form-group">
 				<input type="text" class="form-control" name="bd_title"  readonly value="${board.bd_title}">
 			</div>
@@ -22,7 +26,18 @@
 				<input type="text" class="form-control" name="bd_reg_date"  readonly value="${board.bd_reg_date_str}">
 			</div>
 			<div class="form-group">
-				<textarea class="form-control" name="bd_contents"  rows="10" readonly>${board.bd_contents}</textarea>
+				<div class="form-control" style="min-height:300px; height:auto;">${board.bd_contents}</div>
+			</div>
+			<div class="form-group">
+				<c:if test="${files != null && files.size() != 0}">
+					<label>첨부파일</label>
+					<c:forEach items="${files}" var="file">
+					<a href="<%=request.getContextPath() %>/board/download?fileName=${file.fi_name}" class="form-control">${file.fi_ori_name}</a>
+					</c:forEach>
+				</c:if>
+				<c:if test="${files == null || files.size() == 0 }">
+					<label>첨부파일 없음</label>
+				</c:if>
 			</div>
 			<c:if test="${user != null && user.me_id == board.bd_me_id}">
 				<a href="<%=request.getContextPath()%>/board/modify?bd_num=${board.bd_num}">
@@ -30,6 +45,12 @@
 				</a>
 				<a href="<%=request.getContextPath()%>/board/delete?bd_num=${board.bd_num}">
 					<button class="btn btn-outline-success">삭제</button>
+				</a>
+				
+			</c:if>
+			<c:if test="${board.bd_type != '공지' && board.bd_num == board.bd_ori_num }">
+				<a href="<%=request.getContextPath()%>/board/register?bd_ori_num=${board.bd_num}">
+					<button class="btn btn-outline-success">답글</button>
 				</a>
 			</c:if>
 			<c:if test="${board == null}">

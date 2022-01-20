@@ -9,7 +9,19 @@
 </head>
 <body>
 	<div class="body container">
+	<c:if test="${pm.criteria.type != null && pm.criteria.type == 'NORMAL'}">
 	<h1>게시글</h1>
+	</c:if>
+	<c:if test="${pm.criteria.type != null && pm.criteria.type == '공지'}">
+	<h1>공지사항</h1>
+	</c:if>
+		<form class="input-group mb-3">
+		  <input type="text" class="form-control" name="search" placeholder="검색어를 입력하세요." value="${pm.criteria.search }">
+		  <div class="input-group-append">
+		    <button class="btn btn-success" type="submit">검색</button>
+		  </div>
+		  <input type="hidden" name="type" value="${pm.criteria.type}">
+		</form>
 		<table class="table table-warning table-hover">
 		    <thead>
 		      <tr>
@@ -17,19 +29,50 @@
 		        <th>제목</th>
 		        <th>작성자</th>
 		        <th>작성날짜</th>
+		        <th>조회수</th>
 		      </tr>
 		    </thead>
 		    <tbody>
-			    <c:forEach items="${list}" var="board">
+			    <c:forEach items="${list}" var="board" varStatus="vs">
 			      <tr>
-			        <td>${board.bd_num}</td>
-			        <td><a href="<%=request.getContextPath()%>/board/detail?bd_num=${board.bd_num}">${board.bd_title}</a></td>
+			        <td>${pm.totalCount - pm.criteria.pageStart - vs.index}</td>
+			        <c:if test="${board.bd_num == board.bd_ori_num }">
+			        	<td><a href="<%=request.getContextPath()%>/board/detail?bd_num=${board.bd_num}">${board.bd_title}</a></td>
+			        </c:if>
+			        <c:if test="${board.bd_num != board.bd_ori_num }">
+			        	<td><a href="<%=request.getContextPath()%>/board/detail?bd_num=${board.bd_num}">┗${board.bd_title}게시글 ${board.bd_me_id}님의 게시글 답변</a></td>
+			        </c:if>
 			        <td>${board.bd_me_id}</td>
 			        <td>${board.bd_reg_date_str}</td>
+			        <td>${board.bd_views}</td>
 			      </tr>
 		    	</c:forEach>
 		    </tbody>
 		  </table>
+		  <ul class="pagination justify-content-center">
+		    <c:if test="${pm.prev}">
+			    <li class="page-item">
+			      <a class="page-link" href="<%=request.getContextPath()%>/board/list?page=${pm.criteria.page-1}&search=${pm.criteria.search}&type=${pm.criteria.type}">이전</a>
+			    </li>
+		    </c:if>
+		    <c:forEach begin="${pm.startPage}" end="${pm.endPage}" var ="i">
+			    <c:if test="${i != pm.criteria.page}">
+				    <li class="page-item">
+				      <a class="page-link" href="<%=request.getContextPath()%>/board/list?page=${i}&search=${pm.criteria.search}&type=${pm.criteria.type}">${i}</a>
+				    </li>
+			    </c:if>
+			    <c:if test="${i == pm.criteria.page}">
+				    <li class="page-item active">
+				      <a class="page-link" href="<%=request.getContextPath()%>/board/list?page=${i}&search=${pm.criteria.search}&type=${pm.criteria.type}">${i}</a>
+				    </li>
+			    </c:if>
+		    </c:forEach>
+		    <c:if test="${pm.next}">
+			    <li class="page-item">
+			      <a class="page-link" href="<%=request.getContextPath()%>/board/list?page=${pm.criteria.page+1}&search=${pm.criteria.search}&type=${pm.criteria.type}">다음</a>
+			    </li>
+		    </c:if>
+		  </ul>
 		  <c:if test="${user != null }">
 			  <a href="<%=request.getContextPath()%>/board/register">
 			  	<button class="btn btn-outline-success">글쓰기</button>
