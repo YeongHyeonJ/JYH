@@ -22,9 +22,9 @@ public class BoardServiceImp implements BoardService{
 	@Autowired
 	BoardDAO boardDao;
 	//집 저장경로
-	//String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
+	String uploadPath = "C:\\Users\\dudgu\\OneDrive\\바탕 화면\\GIT\\upload";
 	//학원 저장경로
-	String uploadPath = "D:\\JAVA_JYH\\upload";
+	//String uploadPath = "D:\\JAVA_JYH\\upload";
 	
 	@Override
 	public List<BoardVO> getBoardList(Criteria cri) {
