@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/comment.js"></script>
 </head>
 <body>
 	<div class="body container">
@@ -56,8 +56,23 @@
 		</c:if>
 		<c:if test="${board == null}">
 				<h1>없는 게시글이거나 삭제된 게시글입니다.</h1>
-			</c:if>
-		<hr class="mt-3">
+		</c:if>
+		
+		<div class="comment-list">
+			<div class="comment-box clearfix">
+				<div class="float-left" style="width:24px">┗</div>
+				<div class=" float-left" style="width: calc(100% - 24px)">
+					<div class="co_me_id">qwe</div>
+					<div class="co_contents mt-2">댓글 내용</div>
+					<div class="co_reg_date mt-2">2022-01-24</div>
+					<button class="btn-rep-comment btn btn-outline-success">답글</button>
+					<button class="btn-mod-comment btn btn-outline-dark">수정</button>
+					<button class="btn-del-comment btn btn-outline-danger">삭제</button>
+				</div>
+				<hr class="float-left mt-3" style="width:100%">
+			</div>
+		</div>
+		
 		<div class="comment-box mt-3">
 			<div class="input-group mb-3">
 				<textarea class="form-control co_contents" rows="3" placeholder="댓글입력"></textarea>
@@ -66,9 +81,13 @@
 				</div>
 			</div>
 		</div>
+		
+		<hr class="mt-3">
 	</div>
 	<script>
 	var contextPath = '<%=request.getContextPath()%>';
+	commentService.setContextPath(contextPath);
+	console.log(commentService.name);
 	$(function(){
 			$('.btn-comment-insert').click(function(){
 				//유저의 id를 가져온다.
@@ -86,23 +105,52 @@
 						co_contents : co_contents,
 						co_bd_num 	: co_bd_num
 				};
-				$.ajax({
-			        async:false,
-			        type:'POST',
-			        data:JSON.stringify(comment),
-			        url: contextPath + "/comment/insert",
-			        contentType:"application/json; charset=UTF-8",
-			        success : function(res){
-			            if(res){
-			            	alert('댓글등록이 완료 되었습니다.');
-			            	$('.co_contents').val('');
-			            }else{
-			            	alert('댓글등록에 실패 했습니다.')
-			            }
-			        }
-			    });
+				commentService.insert(comment, '/comment/insert', function(res){
+					if(res){
+		            	alert('댓글등록이 완료 되었습니다.');
+		            	$('.co_contents').val('');
+		            }else{
+		            	alert('댓글등록에 실패 했습니다.')
+		            }
+				})
 			});
+			
+			$.ajax({
+		        async:false,
+		        type:'get',
+		        url:contextPath + "/comment/list?page=1&bd_num=" + '${board.bd_num}',
+		        dataType:"json",
+		        success : function(res){
+		            console.log(res);
+		        }
+		    });
+			
 		});
+		function createComment(comment, me_id){
+			
+			var str = '';
+						
+			str+=	'<div class="comment-box clearfix">'
+			if(comment.co_ori_num != comment.co_num){
+			str+=		'<div class="float-left" style="width:24px">┗</div>'
+			str+=		'<div class=" float-left" style="width: calc(100% - 24px)">'
+			}else{
+			str+=		'<div class=" float-left" style="width: 100%">'	
+			}
+			str+=			'<div class="co_me_id">'+comment.co_me_id+'</div>'
+			str+=			'<div class="co_contents mt-2">'+comment.co_contents+'</div>'
+			str+=			'<div class="co_reg_date mt-2">'+comment.co_reg_date+'</div>'
+			if(comment.co_ori_num == comment.co_num)
+			str+=			'<button class="btn-rep-comment btn btn-outline-success">답글</button>'
+			if(comment.co_me_id == me_id){
+			str+=			'<button class="btn-mod-comment btn btn-outline-dark">수정</button>'
+			str+=			'<button class="btn-del-comment btn btn-outline-danger">삭제</button>'
+			}
+			str+=		'</div>'
+			str+=		'<hr class="float-left mt-3" style="width:100%">'
+			str+=	'</div>'
+			return str;
+		}
 	</script>
 </body>
 </html>
