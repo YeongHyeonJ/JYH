@@ -140,7 +140,10 @@ public class BoardController {
 	@ResponseBody
 	@RequestMapping("/download")
 	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{
-	   String uploadPath = "C:\\\\Users\\\\dudgu\\\\OneDrive\\\\바탕 화면\\\\GIT\\\\upload";
+		//학원
+		String uploadPath = "D:\\JAVA_JYH\\upload";
+		//집
+		//String uploadPath = "C:\\\\Users\\\\dudgu\\\\OneDrive\\\\바탕 화면\\\\GIT\\\\upload";
 		InputStream in = null;
 	    ResponseEntity<byte[]> entity = null;
 	    try{

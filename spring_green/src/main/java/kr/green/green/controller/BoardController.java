@@ -44,7 +44,7 @@ public class BoardController {
 		//BoardList를 가져와서 List에 저장
 		List<BoardVO> list = boardService.getBoardList( cri);
 		int totalCount = boardService.getTotalCount( cri);
-		System.out.println(totalCount);
+		//System.out.println(totalCount);
 		PageMaker pm = new PageMaker(totalCount, 5, cri);
 		mv.addObject("pm",pm);
 		mv.addObject("list",list);
@@ -82,7 +82,7 @@ public class BoardController {
 		board.setBd_me_id(user.getMe_id());
 		boardService.registerBoard(board, files2);
 		mv.addObject("type", board.getBd_type());
-		System.out.println(files2);
+		//System.out.println(files2);
 		mv.setViewName("redirect:/board/list");
 		
 		//System.out.println(board);
