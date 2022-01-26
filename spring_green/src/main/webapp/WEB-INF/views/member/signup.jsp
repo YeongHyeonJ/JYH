@@ -31,6 +31,9 @@
 			<input type="text" class="form-control" placeholder="아이디" name="me_id" value="${user.me_id}" }>
 		</div>
 		<div class="form-group">
+			<button id="idcheck" type="button" class="btn btn-outline-info form-control">아이디 중복 검사</button>
+		</div>
+		<div class="form-group">
 			<input type="password" class="form-control" placeholder="비밀번호" name="me_pw" value="${user.me_pw}">
 		</div>
 		<div class="form-group">
@@ -66,9 +69,15 @@
 		<div class="form-group">
 			<input type="text" class="form-control" placeholder="전화번호(-를 포함하여 입력하세요.)" name="me_phone">
 		</div>
-		<button class="btn btn-outline-success col-12">회원가입</button>
+		<button class="btn btn-outline-info form-control">회원가입</button>
 	</form>
 	<script>
+		
+		
+		$('#birth').datepicker();
+		$('#birth').datepicker('option','dateFormat', 'yy-mm-dd');
+		
+		
 		$('form').submit(function(){
 			var id = $('[name=me_id]').val().trim();
 			var pw = $('[name=me_pw]').val().trim();
@@ -89,6 +98,12 @@
 				$('[name=me_id]').focus();
 				return false;
 			}
+			
+			if(!idCheck){
+				alert('아이디 중복확인을 하세요.');
+				return false;
+			}
+			
 			if(pw == ''){
 				alert('비밀번호를 입력하세요.');
 				$('[name=me_pw]').focus();
@@ -121,6 +136,38 @@
 		$('#birth').datepicker();
 		$('#birth').datepicker('option','dateFormat', 'yy-mm-dd');
 
+		
+		//아이디 체크를 위한 참거짓
+		var idCheck = false;
+		//id=idcheck를 클릭했을때 
+		$('#idcheck').click(function(){
+			//클릭했을때 콘솔창에 1이 뜨는지 확인
+			//console.log(1);
+			var id = $('[name=me_id]').val();
+			//name=me_id의 값을 가져와 id=값 선언 및 확인
+			//console.log(id);
+			$.ajax({
+				async : false,
+		        type :'get',
+		        url : '<%=request.getContextPath()%>/idcheck?me_id='+id,
+		        success : function(data){
+		            console.log(data);
+		            if(data == 'true'){
+		            	alert('사용 가능한 아이디입니다.');
+		            	idCheck = true;
+		            }
+		            else{
+		            	alert('이미 가입된 아이디입니다.');
+		            	idCheck = false;
+		            }
+		        }
+		    });
+		});
+		
+		$('[name=me_id]').change(function(){
+			idCheck = false;
+		});
+		
 		function execDaumPostcode() {
 			new daum.Postcode({
 				oncomplete: function(data) {
