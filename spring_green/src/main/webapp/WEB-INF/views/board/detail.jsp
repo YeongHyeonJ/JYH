@@ -48,31 +48,29 @@
 				</a>
 				
 			</c:if>
-			<c:if test="${board.bd_type != '공지' && board.bd_num == board.bd_ori_num }">
+			<!-- 현재 보고 있는 게시글이 원본 게시글 -->
+			<c:if test="${board.bd_num == board.bd_ori_num && (board.bd_type == 'NORMAL' || board.bd_type == '질문')}">
 				<a href="<%=request.getContextPath()%>/board/register?bd_ori_num=${board.bd_num}">
-					<button class="btn btn-outline-success">답글</button>
+					<button class="btn btn-outline-success">답변</button>
 				</a>
-			</c:if>	
+			</c:if>
+			<!-- 현재 보고 있는 게시글이 답변 게시글 -->
+			<c:if test="${board.bd_num != board.bd_ori_num && (board.bd_type == 'NORMAL' || board.bd_type == '질문')}">
+				<a href="<%=request.getContextPath()%>/board/register?bd_ori_num=${board.bd_ori_num}">
+					<button class="btn btn-outline-success">답변</button>
+				</a>
+			</c:if>
 		</c:if>
 		<c:if test="${board == null}">
 				<h1>없는 게시글이거나 삭제된 게시글입니다.</h1>
 		</c:if>
 		
-		<div class="comment-list">
-			<div class="comment-box clearfix">
-				<div class="float-left" style="width:24px">┗</div>
-				<div class=" float-left" style="width: calc(100% - 24px)">
-					<div class="co_me_id">qwe</div>
-					<div class="co_contents mt-2">댓글 내용</div>
-					<div class="co_reg_date mt-2">2022-01-24</div>
-					<button class="btn-rep-comment btn btn-outline-success">답글</button>
-					<button class="btn-mod-comment btn btn-outline-dark">수정</button>
-					<button class="btn-del-comment btn btn-outline-danger">삭제</button>
-				</div>
-				<hr class="float-left mt-3" style="width:100%">
-			</div>
+		<div class="comment-list mt-3">
+			댓글장소
 		</div>
+		<div class="comment-pagination">
 		
+		</div>
 		<div class="comment-box mt-3">
 			<div class="input-group mb-3">
 				<textarea class="form-control co_contents" rows="3" placeholder="댓글입력"></textarea>
@@ -84,73 +82,144 @@
 		
 		<hr class="mt-3">
 	</div>
-	<script>
-	var contextPath = '<%=request.getContextPath()%>';
-	commentService.setContextPath(contextPath);
-	console.log(commentService.name);
-	$(function(){
-			$('.btn-comment-insert').click(function(){
-				//유저의 id를 가져온다.
-				var co_me_id = '${user.me_id}';
-				//console.log(co_me_id);
-				//id가 없을경우 알람.
-				if(co_me_id==''){
-					alert('댓글은 로그인 후 가능합니다.');
-					return;
-				}
-				var co_contents = $('.co_contents').val();
-				var co_bd_num = '${board.bd_num}';
-				var comment = {
-						co_me_id 	: co_me_id,
-						co_contents : co_contents,
-						co_bd_num 	: co_bd_num
-				};
-				commentService.insert(comment, '/comment/insert', function(res){
-					if(res){
-		            	alert('댓글등록이 완료 되었습니다.');
-		            	$('.co_contents').val('');
-		            }else{
-		            	alert('댓글등록에 실패 했습니다.')
-		            }
-				})
-			});
-			
-			$.ajax({
-		        async:false,
-		        type:'get',
-		        url:contextPath + "/comment/list?page=1&bd_num=" + '${board.bd_num}',
-		        dataType:"json",
-		        success : function(res){
-		            console.log(res);
-		        }
-		    });
-			
-		});
-		function createComment(comment, me_id){
-			
-			var str = '';
-						
-			str+=	'<div class="comment-box clearfix">'
-			if(comment.co_ori_num != comment.co_num){
-			str+=		'<div class="float-left" style="width:24px">┗</div>'
-			str+=		'<div class=" float-left" style="width: calc(100% - 24px)">'
-			}else{
-			str+=		'<div class=" float-left" style="width: 100%">'	
-			}
-			str+=			'<div class="co_me_id">'+comment.co_me_id+'</div>'
-			str+=			'<div class="co_contents mt-2">'+comment.co_contents+'</div>'
-			str+=			'<div class="co_reg_date mt-2">'+comment.co_reg_date+'</div>'
-			if(comment.co_ori_num == comment.co_num)
-			str+=			'<button class="btn-rep-comment btn btn-outline-success">답글</button>'
-			if(comment.co_me_id == me_id){
-			str+=			'<button class="btn-mod-comment btn btn-outline-dark">수정</button>'
-			str+=			'<button class="btn-del-comment btn btn-outline-danger">삭제</button>'
-			}
-			str+=		'</div>'
-			str+=		'<hr class="float-left mt-3" style="width:100%">'
-			str+=	'</div>'
-			return str;
+<script type="text/javascript">
+var contextPath = '<%=request.getContextPath()%>';
+commentService.setContextPath(contextPath);
+//console.log(commentService.contextPath);
+$(function(){
+	$('.btn-comment-insert').click(function(){
+		//유저의 id를 가져온다.
+		var co_me_id = '${user.me_id}';
+		//console.log(co_me_id);
+		//id가 없을경우 알람.
+		if(co_me_id==''){
+			alert('댓글은 로그인 후 가능합니다.');
+			return;
 		}
-	</script>
+		var co_contents = $('textarea.co_contents').val();
+		var co_bd_num = '${board.bd_num}';
+		var comment = {
+				co_me_id 	: co_me_id,
+				co_contents : co_contents,
+				co_bd_num 	: co_bd_num
+		};
+		
+		if(co_contents == ''){
+			alert('댓글을 입력하세요.');
+			return;
+		}
+		commentService.insert(comment, '/comment/insert',insertSuccess);
+	});
+	
+	/*
+	$.ajax({
+	       async:false,
+	       type:'get',
+	       url:contextPath + "/comment/list?page=1&bd_num=" + '${board.bd_num}',
+	       dataType:"json",
+	       success : function(res){
+	          	var str= '';
+	          	var me_id = '${user.me_id}'
+	          	for(tmp of res.list){
+	          		str += createComment(tmp, me_id);
+	          	}
+	          	$('.comment-list').html(str);
+	       }
+	   });
+	*/
+	$(document).on('click', '.comment-pagination .page-item', function(){
+		
+		if($(this).hasClass('disabled')){
+			return;
+		}
+		var page = $(this).data('page');
+		//댓글 새로고침
+		var listUrl = '/comment/list?page='+page+'&bd_num='+'${board.bd_num}';
+		commentService.list(listUrl,listSuccess);
+	});
+	var page = 1;
+	var listUrl = '/comment/list?page='+page+'&bd_num='+'${board.bd_num}';
+	commentService.list(listUrl,listSuccess);
+});
+
+function listSuccess(res){
+	var str = '';
+    var me_id = '${user.me_id}';
+    if(res.list.length == 0){
+    	$('.comment-list').html('');
+    	$('.comment-pagination').html('');
+    	return;
+    }
+    for(tmp of res.list){
+    	str += createComment(tmp, me_id);
+    }
+    $('.comment-list').html(str);
+    
+    var paginationStr = createPagenation(res.pm);
+    $('.comment-pagination').html(paginationStr);
+}
+
+function getDateToString(date){
+	return "" + 
+		date.getFullYear()  + "-" + 
+		(date.getMonth()+1) + "-" +
+		date.getDate()      + " " +
+		date.getHours()     + ":" +
+		date.getMinutes();
+}
+function insertSuccess(res){
+	if(res){
+   	alert('댓글 등록이 완료 되었습니다.');
+   	$('.co_contents').val('');
+   	var listUrl = '/comment/list?page=1&bd_num='+'${board.bd_num}';
+		commentService.list(listUrl,listSuccess);
+   	}else{
+	   	alert('댓글 등록에 실패 했습니다.');
+   	}
+}
+
+
+function createComment(comment, me_id){
+	var co_reg_date = getDateToString(new Date(comment.co_reg_date));
+	var str = '';
+	str+=	'<div class="comment-box clearfix">'
+	
+	if(comment.co_ori_num != comment.co_num){
+	str+=		'<div class="float-left" style="width:24px">└</div>'
+	str+=		'<div class="float-left" style="width: calc(100% - 24px)">'
+	}else{
+	str+=		'<div class="float-left" style="width: 100%">'
+	}
+	str+=			'<div class="co_me_id">'+comment.co_me_id+'</div>'
+	str+=			'<div class="co_contents">'+comment.co_contents+'</div>'
+	str+=			'<div class="co_reg_date">'+co_reg_date+'</div>'
+	if(comment.co_ori_num == comment.co_num)
+	str+=			'<button class="btn btn-outline-success btn-rep-comment mr-2">답글</button>'
+	if(comment.co_me_id == me_id){
+	str+=			'<button class="btn btn-outline-dark btn-mod-comment mr-2" data-num="'+comment.co_num+'">수정</button>'
+	str+=			'<button class="btn btn-outline-danger btn-del-comment" data-num="'+comment.co_num+'">삭제</button>'
+	}
+	str+=		'</div>'
+	str+=		'<hr class="float-left" style="width:100%">'
+	str+=	'</div>'
+	return str;
+}
+function createPagenation(pm){
+	var str = '';
+	var prevDisabled = pm.prev ? '' : 'disabled';
+	var nextDisabled = pm.next ? '' : 'disabled';
+	var page = pm.criteria.page;
+	
+	str+=	'<ul class="pagination justify-content-center">'
+	str+=    '<li class="page-item '+prevDisabled+'" data-page="'+(pm.startPage - 1)+'"><a class="page-link" href="javascript:;">이전</a></li>'
+	for(i = pm.startPage; i<= pm.endPage; i++){
+		var active = page == i ? 'active' : '';
+	str+=    '<li class="page-item '+ active +'" data-page="'+i+'"><a class="page-link" href="javascript:;">'+i+'</a></li>'
+	}
+	str+=    '<li class="page-item '+nextDisabled+'" data-page="'+(pm.endPage + 1)+'"><a class="page-link" href="javascript:;">다음</a></li>'
+	str+=  '</ul>'
+	return str;
+}
+</script>
 </body>
 </html>
