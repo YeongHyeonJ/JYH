@@ -14,6 +14,7 @@ import kr.green.spring.pagination.Criteria;
 import kr.green.spring.utils.UploadFileUtils;
 import kr.green.spring.vo.BoardVO;
 import kr.green.spring.vo.FileVO;
+import kr.green.spring.vo.LikesVO;
 import kr.green.spring.vo.MemberVO;
 
 @Service
@@ -169,6 +170,44 @@ public class BoardServiceImp implements BoardService{
 	public void updateViews(Integer bd_num) {
 		boardDao.updateViews(bd_num);
 		
+	}
+
+	@Override
+	public String likes(LikesVO likes, MemberVO user) {
+		if(likes == null || user == null)
+			return "fail";
+		//DB에서 해당유저가 해당게시글을 추천/비추천했는지 확인
+		LikesVO dbLikes = boardDao.selectLikes(likes);
+		System.out.println(dbLikes);
+		//추천 비추천 한적이 없으면
+		if(dbLikes == null) {
+			boardDao.insertLikes(likes);
+			//해당 게시글에 추천, 비추천 수를 다시 계산
+			boardDao.updateBoardLikes(likes);
+			return ""+likes.getLi_state();
+		}
+		//추천을 또 누르거나 비추천을 또 누르거나 >> 재클릭으로 취소하는경우
+		if(dbLikes.getLi_state() == likes.getLi_state()) {
+			likes.setLi_state(0);
+			boardDao.updateLikes(likes);
+			boardDao.updateBoardLikes(likes);
+			return "0";
+		}
+		//추천 => 비추천 또는 비추천 => 추천 
+		//취소 => 추천 또는 취소 => 비추천
+		boardDao.updateLikes(likes);
+		boardDao.updateBoardLikes(likes);
+		return ""+likes.getLi_state();
+	}
+
+	@Override
+	public String viewLikes(LikesVO likes, MemberVO user) {
+		if(likes == null || user == null)
+			return "0";
+		LikesVO dbLikes = boardDao.selectLikes(likes);
+		if(dbLikes == null)
+			return "0";
+		return "" + dbLikes.getLi_state();
 	}
 
 }

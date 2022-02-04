@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +26,7 @@ import kr.green.spring.pagination.PageMaker;
 import kr.green.spring.service.BoardService;
 import kr.green.spring.vo.BoardVO;
 import kr.green.spring.vo.FileVO;
+import kr.green.spring.vo.LikesVO;
 import kr.green.spring.vo.MemberVO;
 
 @Controller
@@ -137,6 +139,25 @@ public class BoardController {
 		
 		return mv;
 	}
+	@ResponseBody
+	@RequestMapping(value="/likes")
+	public String boardLikes(@RequestBody LikesVO likes,
+			HttpServletRequest request) {
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		//System.out.println(user);
+		//System.out.println(likes);
+		return boardService.likes(likes, user);
+	}
+	@ResponseBody
+	@RequestMapping(value="/viewlikes")
+	public String boardViewLikes(@RequestBody LikesVO likes,
+			HttpServletRequest request) {
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		//System.out.println(user);
+		//System.out.println(likes);
+		return boardService.viewLikes(likes, user);
+	}
+	
 	@ResponseBody
 	@RequestMapping("/download")
 	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{

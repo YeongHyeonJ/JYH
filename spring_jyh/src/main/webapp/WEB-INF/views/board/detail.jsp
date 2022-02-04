@@ -40,6 +40,13 @@
 					<label>첨부파일 없음</label>
 				</c:if>
 			</div>
+				
+			<hr class="mt-3">
+			<div class="justify-content-center likes-btn-box" style="display:flex">
+				<button class="btn btn-outline-primary btn-up" data-state="1">추천</button>
+				<button class="btn btn-outline-primary btn-down ml-2" data-state="-1">비추천</button>
+			</div>
+			
 			<c:if test="${user != null && user.me_id == board.bd_me_id}">
 				<a href="<%=request.getContextPath()%>/board/modify?bd_num=${board.bd_num}">
 					<button class="btn btn-outline-success">수정</button>
@@ -58,6 +65,8 @@
 		<c:if test="${board == null}">
 			<h1>없는 게시글이거나 삭제된 게시글입니다.</h1>
 		</c:if>
+		
+		
 		<hr class="mt-3">
 		<div class="comment-list mt-3">
 			<div class="comment-box">
@@ -121,7 +130,9 @@
 						alert('댓글 등록에 실패했습니다.');
 					}
 				});
+				
 			});
+			
 		});
 		//요소에 이벤트를 등록하는게 아니라 document에 등록해서 요소가 나중에 추가되도
 		//해당 선택자만 맞으면 이벤트가 실행됨
@@ -286,10 +297,78 @@
 			
 		});
 		
+		// 추천/비추천 클릭이벤트
+		$('.btn-up, .btn-down').click(function(){
+			var li_state= $(this).data('state');
+			//state data를 확인
+			//console.log(state);
+			var li_bd_num	= '${board.bd_num}';
+			var li_me_id	= '${user.me_id}';
+			var likes = {
+					li_state	: li_state,
+					li_bd_num	: li_bd_num,
+					li_me_id	: li_me_id					
+			}
+			if(li_me_id == ''){
+				alert('로그인한 회원만 가능합니다.')
+				return;
+			}
+			//게시글번호, 아이디, state data를 하나의 객채로 생성 및 확인
+			//console.log(likes);
+			$.ajax({
+				async:false,
+				type:'POST',
+				data: JSON.stringify(likes),
+				url: '<%=request.getContextPath()%>/board/likes',
+				dataType:"json",
+				contentType:"application/json; charset=UTF-8",
+				success : function(res){
+					console.log(res);
+					if(res == 1){
+						alert('추천했습니다.');
+					}else if(res == -1){
+						alert('비추천했습니다.');
+					}else if(res != "fail"){
+						var str = li_state == 1 ? '추천' : '비추천';
+						alert(str + '을 취소했습니다.')
+					}
+					viewLikes(likes);
+				}
+			});
+		})
+		
+		
+		
 		//화면 로딩 후 댓글과 댓글 페이지네이션 배치
 		var co_bd_num = '${board.bd_num}';
 		readComment(co_bd_num, 1);
+		viewLikes({
+			li_bd_num	: '${board.bd_num}',
+			li_me_id	: '${user.me_id}'
+		})
 		
+		//추천 비추천 상태
+		function viewLikes(likes){
+			$.ajax({
+				async:false,
+				type:'POST',
+				data: JSON.stringify(likes),
+				url: '<%=request.getContextPath()%>/board/viewlikes',
+				dataType:"json",
+				contentType:"application/json; charset=UTF-8",
+				success : function(res){
+					$('.likes-btn-box .btn')
+						.removeClass('btn-primary')
+						.addClass('btn-outline-primary');
+					$('.likes-btn-box .btn').each(function(){
+						if($(this).data('state') == res){
+							$(this).removeClass('btn-outline-primary')
+							.addClass('btn-primary');
+						}
+					});
+				}
+			});
+		}
 		
 		
 		//함수들 모음
