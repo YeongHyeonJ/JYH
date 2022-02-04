@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -78,5 +79,31 @@ public class HomeController {
 		if(!memberService.idDuplicated(id))
 			return "ok";
 		return "no";
+	}
+	
+	@RequestMapping(value = "/mypage")
+	public ModelAndView mypageGet(ModelAndView mv, MemberVO input,
+			HttpServletRequest request) {
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		System.out.println(user);
+		MemberVO newUser = memberService.updateMember(input, user);
+		if(newUser != null) {
+			request.getSession().setAttribute("user", newUser);
+			
+		}
+		mv.setViewName("/member/mypage");
+		return mv;
+	}
+	@RequestMapping(value = "/member/find")
+	public ModelAndView memberFind(ModelAndView mv) {
+		mv.setViewName("/member/find");
+		return mv;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/member/find/id")
+	public String memberfindId(@RequestBody MemberVO member) {
+		//이메일과 이름이 입력 잘 되었는지 확인
+		//System.out.println(member);
+		return memberService.findId(member);
 	}
 }

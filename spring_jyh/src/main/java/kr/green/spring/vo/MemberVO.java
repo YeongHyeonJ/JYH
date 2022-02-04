@@ -22,5 +22,11 @@ public class MemberVO {
 	private String me_address;
 	private String me_phone;
 	private String me_authority;
+	private String me_email;
 			
+	public String getMe_birth_str() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String str = format.format(me_birth);
+		return str;
+	}	
 }

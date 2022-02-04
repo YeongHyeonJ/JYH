@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -70,84 +71,84 @@
 		<button class="btn btn-outline-success col-12">회원가입</button>
 	</form>
 	<script>
-		var idCheck = false;
-		
-		$('#idcheck').click(function(){
-			var id = $('[name=me_id]').val();
-			$.ajax({
-				async : false,
-		        type :'POST',
-		        data : {id : id },
-		        url : "<%=request.getContextPath()%>/idcheck",
-		        success : function(res){
-		            console.log(res);
-		            if(res == 'ok')
-		            	idCheck = true;
-		            else
-		            	idCheck = false;
-		            //idcheck = res == 'ok' ? true : false;
-		            if(idCheck)
-		            	alert('사용 가능한 아이디입니다.')
-		            else
-		            	alert('이미 이용중인 아이디입니다.')
-		        }
-		    });
-		});
-		
-		$('[name=me_id]').change(function(){
-			idCheck = false;
-		});
-		
-		$('form').submit(function(){
-			var isAgree = $('[name=agree]').is(':checked');
-			//동의에 체크되지 않으면
-			if(!isAgree){
-				alert('동의에 체크해야합니다.');
-				$('[name=agree]').focus();
-				return false;
-			}
-			if(!idCheck){
-				alert('아이디 중복검사를 하세요.');
-				return false;
-			}
-			var address = $('#address').val() + ' ' +$('#detailAddress').val();
-			$('[name=me_address]').val(address);
-		});
+	var idCheck = false;
+	
+	$('#idcheck').click(function(){
+		var id = $('[name=me_id]').val();
+		$.ajax({
+			async : false,
+	        type :'POST',
+	        data : {id : id },
+	        url : "<%=request.getContextPath()%>/idcheck",
+	        success : function(res){
+	            console.log(res);
+	            if(res == 'ok')
+	            	idCheck = true;
+	            else
+	            	idCheck = false;
+	            //idcheck = res == 'ok' ? true : false;
+	            if(idCheck)
+	            	alert('사용 가능한 아이디입니다.')
+	            else
+	            	alert('이미 이용중인 아이디입니다.')
+	        }
+	    });
+	});
+	
+	$('[name=me_id]').change(function(){
+		idCheck = false;
+	});
+	
+	$('form').submit(function(){
+		var isAgree = $('[name=agree]').is(':checked');
+		//동의에 체크되지 않으면
+		if(!isAgree){
+			alert('동의에 체크해야합니다.');
+			$('[name=agree]').focus();
+			return false;
+		}
+		if(!idCheck){
+			alert('아이디 중복검사를 하세요.');
+			return false;
+		}
+		var address = $('#address').val() + ' ' +$('#detailAddress').val();
+		$('[name=me_address]').val(address);
+	});
 
-		$('#birth').datepicker();
-		$('#birth').datepicker('option','dateFormat', 'yy-mm-dd');
+	$('#birth').datepicker();
+	$('#birth').datepicker('option','dateFormat', 'yy-mm-dd');
 
-		function execDaumPostcode() {
-			new daum.Postcode({
-				oncomplete: function(data) {
-					var addr = ''; // 주소 변수
-					var extraAddr = ''; // 참고항목 변수
-					if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-						addr = data.roadAddress;
-					} else { // 사용자가 지번 주소를 선택했을 경우(J)
-						addr = data.jibunAddress;
-					}
-
-					// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-					if(data.userSelectedType === 'R'){
-						// 법정동명이 있을 경우 추가한다. (법정리는 제외)
-						// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-						if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-								extraAddr += data.bname;
-						}
-						// 건물명이 있고, 공동주택일 경우 추가한다.
-						if(data.buildingName !== '' && data.apartment === 'Y'){
-								extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-						}
-					
-					} 
-					// 우편번호와 주소 정보를 해당 필드에 넣는다.
-					document.getElementById('postcode').value = data.zonecode;
-					document.getElementById("address").value = addr;
-					// 커서를 상세주소 필드로 이동한다.
-					document.getElementById("detailAddress").focus();
+	function execDaumPostcode() {
+		new daum.Postcode({
+			oncomplete: function(data) {
+				var addr = ''; // 주소 변수
+				var extraAddr = ''; // 참고항목 변수
+				if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+					addr = data.roadAddress;
+				} else { // 사용자가 지번 주소를 선택했을 경우(J)
+					addr = data.jibunAddress;
 				}
-			}).open();
+
+				// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+				if(data.userSelectedType === 'R'){
+					// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+					// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+					if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+							extraAddr += data.bname;
+					}
+					// 건물명이 있고, 공동주택일 경우 추가한다.
+					if(data.buildingName !== '' && data.apartment === 'Y'){
+							extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+					}
+				
+				} 
+				// 우편번호와 주소 정보를 해당 필드에 넣는다.
+				document.getElementById('postcode').value = data.zonecode;
+				document.getElementById("address").value = addr;
+				// 커서를 상세주소 필드로 이동한다.
+				document.getElementById("detailAddress").focus();
+			}
+		}).open();
     }
 	</script>
 </body>
