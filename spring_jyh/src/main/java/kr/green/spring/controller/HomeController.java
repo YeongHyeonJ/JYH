@@ -85,7 +85,7 @@ public class HomeController {
 	public ModelAndView mypageGet(ModelAndView mv, MemberVO input,
 			HttpServletRequest request) {
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
-		System.out.println(user);
+		//System.out.println(user);
 		MemberVO newUser = memberService.updateMember(input, user);
 		if(newUser != null) {
 			request.getSession().setAttribute("user", newUser);
@@ -105,5 +105,12 @@ public class HomeController {
 		//이메일과 이름이 입력 잘 되었는지 확인
 		//System.out.println(member);
 		return memberService.findId(member);
+	}
+	@ResponseBody
+	@RequestMapping(value = "/member/find/pw")
+	public String memberfindPw(@RequestBody MemberVO member) {
+		//이메일과 아이디가 입력 잘 되었는지 확인
+		System.out.println(member);
+		return memberService.findPw(member);
 	}
 }

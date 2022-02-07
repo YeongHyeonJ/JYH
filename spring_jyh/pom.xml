@@ -218,6 +218,18 @@
 		    <artifactId>jackson-databind</artifactId>
 		    <version>2.13.1</version>
 		</dependency>
+		
+		<!-- 비밀번호 찾기 이메일 보내는 의존성 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4.3</version>
+		</dependency>
 
         
 	</dependencies>

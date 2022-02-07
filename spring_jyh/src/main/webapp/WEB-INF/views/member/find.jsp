@@ -81,7 +81,31 @@ $('.btn-find-id').click(function(){
 		}
 	});
 });
-
+$('.btn-find-pw').click(function(){
+	var me_email = $(this).parents('li').find('[name=me_email]').val();
+	var me_id = $(this).parents('li').find('[name=me_id]').val();
+	var member = {
+			me_email	: me_email,
+			me_id		: me_id
+	}
+	//console.log(member);
+	$.ajax({
+		async:false,
+		type:'POST',
+		data: JSON.stringify(member),
+		url: '<%=request.getContextPath()%>/member/find/pw',
+		contentType:"application/json; charset=UTF-8",
+		success : function(res){
+			if(res == 'true'){
+				alert('새 비밀번호가 발급되었습니다. 메일을 확인해주세요.')
+			}else if(res = 'false'){
+				alert('입력한 정보가 잘못됐습니다. 다시 확인해주세요.')
+			}else if(res = 'error'){
+				alert('메일 전송에 실패하였습니다. 관리자에게 문의해주세요.')
+			}
+		}
+	});
+});
 
 
 $('.find .nav-tabs a').first().click();

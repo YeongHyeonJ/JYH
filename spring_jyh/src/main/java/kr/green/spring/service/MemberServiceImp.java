@@ -1,6 +1,10 @@
 package kr.green.spring.service;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,9 @@ public class MemberServiceImp implements MemberService{
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
 
+	@Autowired
+	private JavaMailSender mailSender;
+	
 	@Override
 	public MemberVO login(MemberVO member) {
 		if(member == null || member.getMe_id() == null)
@@ -86,5 +93,66 @@ public class MemberServiceImp implements MemberService{
 		if(user == null)
 			return "";
 		return user.getMe_id();
+	}
+
+	@Override
+	public String findPw(MemberVO member) {
+		//예외처리
+		if(member == null)
+			return "false";
+		MemberVO user = memberDao.getMember(member.getMe_id());
+		if(user == null || !user.getMe_email().equals(member.getMe_email()))
+			return "false";
+		//임시 비밀번호를 생성 (6)은 자리수
+		String newPw = createRandomPw(6);
+		//생성된 비밀번호를 암호화해서 DB에 저장
+		String encPw = passwordEncoder.encode(newPw);
+		user.setMe_pw(encPw);
+		memberDao.updateMember(user);
+		//암호화 안된 비밀번호를 이메일로 전송
+		String setfrom = "dudgus7700@gmail.com";         
+	    String tomail  = member.getMe_email();     // 받는 사람 이메일
+	    String title   = "임시 비밀번호입니다.";      // 제목
+	    String content = "임시 비밀번호는 " + newPw + " 입니다.";    // 내용
+
+	    try {
+	        MimeMessage message = mailSender.createMimeMessage();
+	        MimeMessageHelper messageHelper 
+	            = new MimeMessageHelper(message, true, "UTF-8");
+
+	        messageHelper.setFrom(setfrom);  // 보내는사람 생략하거나 하면 정상작동을 안함
+	        messageHelper.setTo(tomail);     // 받는사람 이메일
+	        messageHelper.setSubject(title); // 메일제목은 생략이 가능하다
+	        messageHelper.setText(content);  // 메일 내용
+
+	        mailSender.send(message);
+	    } catch(Exception e){
+	        return "error";
+	    }
+		return "true";
+	}
+	
+	
+	private String createRandomPw(int maxSize) {
+		String newPw = "";
+		// maxSize = 자리수
+		// 영어와 숫자로 이루어지기에 a~z,A~Z,0~9 = 62가지
+		// 랜덤 수를 생성 = 0~61
+		for(int i = 0; i<maxSize; i++) {
+			int max = 61, min = 0;
+			int r = (int)(Math.random() * (max - min + 1 ) + min);
+			// int r = (int)(Math.random() * 62);
+			if(0 <= r && r <= 9) {
+				// 랜덤 수 0~9 = 0~9 
+				newPw += (char)('0' + r);
+			}else if(r <= 35) {
+				// 랜덤 수 10~35 = a~z
+				newPw += (char)('a' + (r - 10));
+			}else if(r <= 61) {
+				// 랜덤 수 36~61 = A~Z
+				newPw += (char)('A' + (r - 36));
+			}
+		}
+		return newPw;
 	}
 }
