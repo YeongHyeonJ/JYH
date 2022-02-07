@@ -29,7 +29,7 @@ public class MemberServiceImp implements MemberService{
 			return null;
 		//클래스 MemberVO를 사용한 변수명 >> 인터페이스memberDao로 연결된 MemberVO의 getMember요소중 Me_id를 가져온다.
 		MemberVO user = memberDao.getMember(member.getMe_id());
-		System.out.println(user);
+		//System.out.println(user);
 		if(user == null)
 			return null;
 		//matches(로그인창에서의 입력 비번, 암호화된 비번) >> 같으면 true 다르면 false
@@ -155,4 +155,18 @@ public class MemberServiceImp implements MemberService{
 		}
 		return newPw;
 	}
+
+	@Override
+	public void updateAutoLogin(MemberVO user) {
+		if(user == null)
+			return;
+		memberDao.updateAutoLogin(user);
+	}
+
+	@Override
+	public MemberVO selectMemberBySessionId(String me_session_id) {
+		
+		return memberDao.selectMemberBySessionId(me_session_id);
+	}
+
 }

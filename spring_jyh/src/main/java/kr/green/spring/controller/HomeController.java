@@ -1,6 +1,10 @@
 package kr.green.spring.controller;
 
+import java.util.Date;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import kr.green.spring.service.MemberService;
 import kr.green.spring.vo.MemberVO;
@@ -42,6 +47,7 @@ public class HomeController {
 		if(user == null) {
 			mv.setViewName("redirect:/login");
 		}else {
+			user.setMe_auto_login(member.getMe_auto_login());
 			mv.addObject("user", user);
 			mv.setViewName("redirect:/");
 		}
@@ -65,7 +71,24 @@ public class HomeController {
 		return mv;
 	}
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public ModelAndView logoutGet(ModelAndView mv, HttpServletRequest request) {
+	public ModelAndView logoutGet(ModelAndView mv, 
+			HttpServletRequest request, HttpServletResponse response) {
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		if(user != null) {
+			//세션에 있는 유저 정보를 삭제
+			request.getSession().removeAttribute("user");
+			//request에 있는 쿠키들 중 login쿠키를 가져옴
+			Cookie cookie = WebUtils.getCookie(request, "loginCookie");
+			//loginCookie 정보가 있으면(자동로그인 했다가 로그아웃 하는 경우)
+			if(cookie != null) {
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
+				user.setMe_session_id("none");
+				user.setMe_session_limit(new Date());
+				memberService.updateAutoLogin(user);
+			}
+		}
+		
 		//System.out.println("/logout:get :");
 		//세션에 있는 user 정보를 삭제
 		request.getSession().removeAttribute("user");
@@ -110,7 +133,9 @@ public class HomeController {
 	@RequestMapping(value = "/member/find/pw")
 	public String memberfindPw(@RequestBody MemberVO member) {
 		//이메일과 아이디가 입력 잘 되었는지 확인
-		System.out.println(member);
+		//System.out.println(member);
 		return memberService.findPw(member);
 	}
+	
+
 }

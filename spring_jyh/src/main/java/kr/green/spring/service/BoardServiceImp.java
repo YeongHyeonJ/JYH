@@ -178,7 +178,7 @@ public class BoardServiceImp implements BoardService{
 			return "fail";
 		//DB에서 해당유저가 해당게시글을 추천/비추천했는지 확인
 		LikesVO dbLikes = boardDao.selectLikes(likes);
-		System.out.println(dbLikes);
+		//System.out.println(dbLikes);
 		//추천 비추천 한적이 없으면
 		if(dbLikes == null) {
 			boardDao.insertLikes(likes);

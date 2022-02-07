@@ -16,7 +16,7 @@ public class AjaxController {
 	@RequestMapping(value ="/ajax/test1")
 	public String ajaxtTest1(String str){
 
-	    System.out.println(str);
+	    //System.out.println(str);
 	    return "success : " + str;
 	}
 	@ResponseBody

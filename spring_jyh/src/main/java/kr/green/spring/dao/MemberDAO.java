@@ -1,5 +1,7 @@
 package kr.green.spring.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import kr.green.spring.vo.MemberVO;
@@ -13,5 +15,11 @@ public interface MemberDAO {
 	void updateMember(@Param("user")MemberVO input);
 
 	MemberVO findMember(@Param("user")MemberVO member);
+
+	List<MemberVO> selectMemberList();
+
+	void updateAutoLogin(@Param("user")MemberVO user);
+
+	MemberVO selectMemberBySessionId(@Param("me_session_id")String me_session_id);
 
 }
