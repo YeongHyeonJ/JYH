@@ -10,4 +10,8 @@ public interface MemberDAO {
 
 	void insertMember(@Param("user")MemberVO user);
 
+	void updateMember(@Param("user")MemberVO inputUser);
+
+	String selectFind(@Param("user")MemberVO member);
+
 }

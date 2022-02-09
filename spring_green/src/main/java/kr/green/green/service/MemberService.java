@@ -10,4 +10,10 @@ public interface MemberService {
 
 	String idCheck(String me_id);
 
+	MemberVO updateMember(MemberVO inputUser, MemberVO user);
+
+	String memberFindId(MemberVO member);
+
+	String memberFindPw(MemberVO member);
+
 }

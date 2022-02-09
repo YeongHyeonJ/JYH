@@ -39,6 +39,13 @@
 					<label>첨부파일 없음</label>
 				</c:if>
 			</div>
+			
+			<div class="likes-btn-box mb-3">
+				<button class="btn btn-outline-primary btn-up" data-value="1">추천</button>
+				<button class="btn btn-outline-danger btn-down" data-value="-1">비추천</button>
+			</div>
+			
+			
 			<c:if test="${user != null && user.me_id == board.bd_me_id}">
 				<a href="<%=request.getContextPath()%>/board/modify?bd_num=${board.bd_num}">
 					<button class="btn btn-outline-success">수정</button>
@@ -141,6 +148,72 @@ $(function(){
 	var listUrl = '/comment/list?page='+page+'&bd_num='+'${board.bd_num}';
 	commentService.list(listUrl,listSuccess);
 });
+
+
+$('.likes-btn-box .btn').click(function(){
+	var li_me_id = '${user.me_id}';
+	var li_bd_num = '${board.bd_num}';
+	var li_state = $(this).data('value');
+	var likes = {
+			li_me_id : li_me_id,
+			li_bd_num: li_bd_num,
+			li_state : li_state
+	}
+	$.ajax({
+		async:false,
+		type:'POST',
+		data:JSON.stringify(likes),
+		url: '<%=request.getContextPath()%>/board/likes',
+		contentType:"application/json; charset=UTF-8",
+		success : function(res){
+			if(res == 2)
+				alert('로그인 해주세요.')
+	    	else if(res == 1)
+	    		alert('추천했습니다.');
+	    	else if(res == -1)
+	    		alert('비추천했습니다.');
+	    	else if(res == 0){
+	    		if(li_state == 1)
+		    		alert('추천을 취소했습니다.');
+		    	else
+		    		alert('비추천을 취소했습니다.');
+	    	}
+			loadLikes({
+				li_bd_num : '${board.bd_num}'
+			});
+		}	
+	});
+});
+
+
+function loadLikes(likes){
+	$.ajax({
+		async:false,
+		type:'POST',
+		data: JSON.stringify(likes),
+		url: '<%=request.getContextPath()%>/board/likes/views',
+		dataType:"json",
+		contentType:"application/json; charset=UTF-8",
+		success : function(res){
+			$('.btn-up')
+				.removeClass('btn-primary')
+				.addClass('btn-outline-primary');
+			$('.btn-down')
+				.removeClass('btn-danger')
+				.addClass('btn-outline-danger');
+			if(res == -1){
+				$('.btn-down')
+				.removeClass('btn-outline-danger')
+				.addClass('btn-danger');
+			}else if(res == 1){
+				$('.btn-up')
+				.removeClass('btn-outline-primary')
+				.addClass('btn-primary');
+			}
+			
+		}
+	});
+}
 
 function listSuccess(res){
 	var str = '';

@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<input type="text" class="form-control" placeholder="아이디" name="me_id" value="${user.me_id}" }>
+			<input type="text" class="form-control" placeholder="아이디" name="me_id" value="${user.me_id}">
 		</div>
 		<div class="form-group">
 			<button id="idcheck" type="button" class="btn btn-outline-info form-control">아이디 중복 검사</button>

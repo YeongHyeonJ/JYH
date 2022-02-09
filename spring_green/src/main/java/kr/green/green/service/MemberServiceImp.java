@@ -58,4 +58,49 @@ public class MemberServiceImp implements MemberService {
 		return "false";
 	}
 
+	@Override
+	public MemberVO updateMember(MemberVO inputUser, MemberVO user) {
+		if(inputUser == null || user == null 
+				|| inputUser.getMe_id() == null 
+				|| inputUser.getMe_id().length() == 0)
+			return null;
+		inputUser.setMe_id(user.getMe_id());
+		inputUser.setMe_authority(user.getMe_authority());
+		
+		if(inputUser.getMe_pw() == null || inputUser.getMe_pw().length() == 0) {
+			inputUser.setMe_pw(user.getMe_pw());
+		}else {
+			String encPw = passwordEncoder.encode(inputUser.getMe_pw());
+			inputUser.setMe_pw(encPw);
+		}
+		
+		if(inputUser.getMe_address() == null 
+				|| inputUser.getMe_address().length() == 0) {
+			inputUser.setMe_address(user.getMe_address());
+		}
+		memberDao.updateMember(inputUser);
+		return inputUser;
+	}
+
+	@Override
+	public String memberFindId(MemberVO member) {
+		if(member == null || member.getMe_email() == null
+				|| member.getMe_name() == null)
+			return null;
+		//System.out.println(member);
+		
+		return memberDao.selectFind(member);
+	}
+
+	@Override
+	public String memberFindPw(MemberVO member) {
+		if(member == null || member.getMe_email() == null
+				|| member.getMe_id() == null)
+			return null;
+		
+		
+		
+		return null;
+	}
+
 }

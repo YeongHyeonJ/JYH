@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -80,6 +81,41 @@ public class HomeController {
 	public String idcheck(String me_id) {
 		
 		return memberService.idCheck(me_id);
+	}
+	@RequestMapping(value = "/mypage")
+	public ModelAndView mypage(ModelAndView mv, 
+			MemberVO inputUser,
+			HttpServletRequest request) {
+		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
+		System.out.println(user);
+		System.out.println(inputUser);
+		MemberVO newUser = memberService.updateMember(inputUser, user);
+		if(newUser != null) {
+			request.getSession().setAttribute("user",newUser);
+		}
+		mv.setViewName("/member/mypage");
+		
+		return mv;
+	}
+	
+	@RequestMapping(value = "/find")
+	public ModelAndView find(ModelAndView mv) {
+		
+		mv.setViewName("/member/find");
+		mv.addObject("serverTime","데이터");
+		
+		return mv;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/member/find/id")
+	public String memberFindId(@RequestBody MemberVO member) {
+		return memberService.memberFindId(member);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/member/find/pw")
+	public String memberFindPw(@RequestBody MemberVO member) {
+		return memberService.memberFindPw(member);
 	}
 	
 }
