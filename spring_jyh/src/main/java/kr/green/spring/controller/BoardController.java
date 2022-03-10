@@ -62,7 +62,7 @@ public class BoardController {
 	@RequestMapping(value="/register", method=RequestMethod.POST)
 	public ModelAndView boardRegisterPost(ModelAndView mv, BoardVO board, 
 			HttpServletRequest request, List<MultipartFile> files2) throws Exception {
-		
+		System.out.println(files2);
 		//공지를 작성할때 관리자와 슈퍼관리자만 작성하도록 하는 코드
 		MemberVO user = (MemberVO)request.getSession().getAttribute("user");
 		board.setBd_me_id(user.getMe_id());
@@ -162,9 +162,9 @@ public class BoardController {
 	@RequestMapping("/download")
 	public ResponseEntity<byte[]> downloadFile(String fileName)throws Exception{
 		//학원
-		String uploadPath = "D:\\JAVA_JYH\\upload";
+		//String uploadPath = "D:\\JAVA_JYH\\upload";
 		//집
-		//String uploadPath = "C:\\\\Users\\\\dudgu\\\\OneDrive\\\\바탕 화면\\\\GIT\\\\upload";
+		String uploadPath = "C:\\\\Users\\\\dudgu\\\\OneDrive\\\\바탕 화면\\\\GIT\\\\upload";
 		InputStream in = null;
 	    ResponseEntity<byte[]> entity = null;
 	    try{

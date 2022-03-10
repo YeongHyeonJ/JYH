@@ -1,5 +1,7 @@
 package kr.green.green.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -96,11 +98,35 @@ public class MemberServiceImp implements MemberService {
 	public String memberFindPw(MemberVO member) {
 		if(member == null || member.getMe_email() == null
 				|| member.getMe_id() == null)
+			return "fail";
+		
+		
+		
+		return "ok";
+	}
+
+	@Override
+	public List<MemberVO> getUserList(MemberVO user) {
+		if(user == null)
+			return null;
+		if(!user.getMe_authority().equals("슈퍼 관리자"))
 			return null;
 		
-		
-		
-		return null;
+		return memberDao.selectMemberList();
+	}
+
+	@Override
+	public boolean changeAuthority(MemberVO member, MemberVO user) {
+		if(member == null || user == null)
+			return false;
+		if(user.getMe_authority().equals("슈퍼 관리자"))
+			return false;
+		MemberVO dbUser = memberDao.getMember(member.getMe_id());
+		if(dbUser == null || dbUser.getMe_authority().equals("슈퍼 관리자"))
+			return false;
+		dbUser.setMe_authority(member.getMe_authority());
+		memberDao.updateMember(dbUser);
+		return true;
 	}
 
 }

@@ -43,7 +43,7 @@
     <div class="container pw-box"><br>
       <h3>비밀번호 찾기</h3>
       <div class="form-group">
-		<input type="text" class="form-control" name="me_email_pw" placeholder="이메일을 입력하세요.">
+		<input type="text" class="form-control" name="me_email" placeholder="이메일을 입력하세요.">
 	  </div>
 	  <div class="form-group">
 	  	<input type="text" class="form-control" name="me_id" placeholder="아이디를 입력하세요.">
@@ -87,8 +87,8 @@ $('.btn-find-id').click(function(){
 });
 
 $('.btn-find-pw').click(function(){
-	var me_email = $(this).parents('div').find('[name=me_email_pw]').val();
-	var me_id = $(this).parents('div').find('[name=me_id]').val();
+	var me_email = $('.pw-box [name=me_email]').val();
+	var me_id = $('.pw-box [name=me_id]').val();
 	var member = {
 			me_email : me_email,
 			me_id : me_id

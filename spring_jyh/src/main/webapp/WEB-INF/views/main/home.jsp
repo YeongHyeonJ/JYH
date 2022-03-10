@@ -11,16 +11,14 @@
 <body>
 	<div class="body">
 		<select class="main-category">
-			<option>선택</option>
+			<option>대분류</option>
 		</select>
 		<select class="middle-category">
-			<option>선택</option>
+			<option>중분류</option>
 		</select>
 		<select class="sub-category">
-			<option>선택</option>
+			<option>소분류</option>
 		</select>
 	</div>
-	
-	
 </body>
 </html>
